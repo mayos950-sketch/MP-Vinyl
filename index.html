@@ -8,7 +8,7 @@
   <style>
     :root{
       --bg:#0d0f12;--card:#16191e;--card2:#1e2229;--text:#f4f4f4;--muted:#aeb4bf;
-      --accent:#e2b84b;--line:#2c323b;--danger:#c94d4d;--ok:#4caf7d;
+      --accent:#e2b84b;--accent2:#f0cf7a;--line:#2c323b;--danger:#c94d4d;--ok:#4caf7d;--glow:0 14px 36px rgba(0,0,0,.28);
     }
     *{box-sizing:border-box}
     body{margin:0;background:linear-gradient(180deg,#0b0d10,#12151a 55%,#0b0d10);
@@ -428,6 +428,27 @@ function applyLang(){
 }
 $('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
 applyLang();
+
+
+const THEME_KEY='mp-vinyl-theme';
+let theme=localStorage.getItem(THEME_KEY)||'luxury';
+
+function applyTheme(){
+  document.body.classList.remove('theme-luxury','theme-retro','theme-neon','theme-pop','theme-dark');
+  document.body.classList.add('theme-'+theme);
+  const sel=document.getElementById('themeSelect');
+  if(sel) sel.value=theme;
+}
+
+const themeSelect=document.getElementById('themeSelect');
+if(themeSelect){
+  themeSelect.addEventListener('change',e=>{
+    theme=e.target.value;
+    localStorage.setItem(THEME_KEY,theme);
+    applyTheme();
+  });
+}
+applyTheme();
 
 </script>
 </body>
