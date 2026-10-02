@@ -190,7 +190,226 @@
       background:linear-gradient(180deg,#171b20,#0f1216);border-color:#2a3138
     }
 
-  </style>
+  
+/* BIG VISUAL THEME DIFFERENCES */
+.hero-main{position:relative;overflow:hidden;min-height:250px}
+.hero-main > *:not(.theme-scene){position:relative;z-index:2}
+.theme-scene{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.theme-scene > *{position:absolute}
+
+/* Luxury Hi-Fi: walnut + turntable + VU meters */
+body.theme-luxury .hero{
+  grid-template-columns:1.3fr .7fr;
+  gap:18px;
+}
+body.theme-luxury .hero-main{
+  min-height:310px;
+  padding-right:42%;
+  background:
+    linear-gradient(120deg,rgba(31,20,12,.98),rgba(13,10,8,.97)),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 5px);
+  border:1px solid rgba(226,180,91,.28);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 18px 50px rgba(0,0,0,.42);
+}
+body.theme-luxury .hero-main:before{
+  content:"";
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(94,53,26,.18),transparent 28%),
+    repeating-linear-gradient(0deg,rgba(105,62,31,.12) 0 2px,transparent 2px 7px);
+  mix-blend-mode:screen;opacity:.42;
+}
+body.theme-luxury .scene-disc{
+  display:block;right:34px;top:34px;width:185px;height:185px;border-radius:50%;
+  background:
+    radial-gradient(circle,#cda553 0 7%,#191919 8% 18%,#080808 19% 37%,#242424 38% 39%,#090909 40% 56%,#252525 57% 58%,#070707 59%);
+  box-shadow:0 12px 30px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.08);
+}
+body.theme-luxury .scene-arm{
+  display:block;right:38px;top:68px;width:18px;height:150px;border-radius:10px;
+  background:linear-gradient(90deg,#d7d7d7,#6d6d6d,#f0f0f0);
+  transform:rotate(22deg);transform-origin:top center;
+  box-shadow:0 3px 8px rgba(0,0,0,.45);
+}
+body.theme-luxury .scene-meter{
+  display:flex;gap:10px;right:28px;bottom:22px;
+}
+body.theme-luxury .scene-meter span{
+  width:82px;height:44px;border-radius:8px;
+  background:
+    linear-gradient(180deg,#f5d78c,#d9aa4f 65%,#7d5125);
+  border:2px solid #6e4c29;
+  box-shadow:inset 0 0 12px rgba(0,0,0,.35);
+}
+body.theme-luxury .scene-meter span:after{
+  content:"";display:block;width:2px;height:28px;background:#3a220f;margin:8px auto 0;
+  transform:rotate(25deg);transform-origin:bottom center;
+}
+body.theme-luxury .scene-neon,
+body.theme-luxury .scene-pop{display:none}
+body.theme-luxury .record{border-radius:12px}
+body.theme-luxury .cover{border-bottom:1px solid rgba(226,180,91,.18)}
+
+/* Retro: record shop poster / shelf vibe */
+body.theme-retro{
+  background:
+    linear-gradient(rgba(246,224,181,.86),rgba(246,224,181,.86)),
+    repeating-linear-gradient(0deg,#7f5937 0 3px,#6d4a2d 3px 6px);
+}
+body.theme-retro .top{max-width:1180px}
+body.theme-retro .hero{grid-template-columns:1fr;gap:12px}
+body.theme-retro .hero-main{
+  min-height:290px;padding-right:32%;
+  border-radius:6px;
+  background:
+    linear-gradient(0deg,rgba(244,211,155,.92),rgba(244,211,155,.92)),
+    repeating-linear-gradient(90deg,rgba(115,75,42,.15) 0 2px,transparent 2px 7px);
+  border:4px solid #7a4b2b;
+  box-shadow:8px 8px 0 #9b643c;
+}
+body.theme-retro .hero-main:after{
+  content:"RECORDS • VINYL • MUSIC";
+  position:absolute;left:18px;bottom:14px;
+  font-weight:900;letter-spacing:.16em;color:#9b3b21;font-size:.85rem;
+}
+body.theme-retro .scene-disc{
+  display:block;right:38px;top:38px;width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle,#e77739 0 16%,#111 17% 42%,#272727 43% 44%,#111 45% 65%,#2b2b2b 66% 67%,#111 68%);
+  box-shadow:8px 8px 0 rgba(95,55,30,.35);
+}
+body.theme-retro .scene-arm,
+body.theme-retro .scene-meter,
+body.theme-retro .scene-neon,
+body.theme-retro .scene-pop{display:none}
+body.theme-retro .cards{
+  grid-template-columns:repeat(4,1fr);
+  padding:16px;
+  background:rgba(109,74,45,.18);
+  border:4px solid #7a4b2b;
+  box-shadow:inset 0 -12px 0 rgba(111,68,38,.18);
+}
+body.theme-retro .record{
+  border-radius:3px;
+  transform:rotate(-.4deg);
+}
+body.theme-retro .record:nth-child(even){transform:rotate(.4deg)}
+
+/* Neon bar: actual glowing signage */
+body.theme-neon .hero{
+  grid-template-columns:1fr .8fr;
+}
+body.theme-neon .hero-main{
+  min-height:300px;
+  background:
+    linear-gradient(180deg,rgba(8,8,24,.93),rgba(4,4,14,.98)),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 36px);
+  border:1px solid #22d8ff;
+  box-shadow:0 0 25px rgba(34,216,255,.2),inset 0 0 36px rgba(255,45,166,.08);
+}
+body.theme-neon .scene-neon{
+  display:block;right:24px;top:46px;
+  font-size:2rem;font-weight:1000;letter-spacing:.08em;color:#fff;
+  text-shadow:0 0 6px #fff,0 0 12px #28e7ff,0 0 26px #28e7ff,0 0 42px #ff2da6;
+  transform:rotate(-5deg);
+}
+body.theme-neon .scene-disc{
+  display:block;right:74px;bottom:20px;width:132px;height:132px;border-radius:50%;
+  background:radial-gradient(circle,#ff2da6 0 12%,#080808 13% 42%,#2c2c2c 43% 44%,#090909 45% 65%,#262626 66% 67%,#080808 68%);
+  box-shadow:0 0 18px rgba(255,45,166,.45),0 0 30px rgba(40,231,255,.2);
+}
+body.theme-neon .scene-arm,
+body.theme-neon .scene-meter,
+body.theme-neon .scene-pop{display:none}
+body.theme-neon .cards{
+  background:linear-gradient(180deg,rgba(10,11,29,.45),rgba(7,8,20,.65));
+  padding:12px;border-radius:18px;
+}
+body.theme-neon .record{
+  border-color:rgba(40,231,255,.28);
+  box-shadow:0 0 18px rgba(40,231,255,.07),0 0 22px rgba(255,45,166,.07);
+}
+body.theme-neon .record:hover{
+  box-shadow:0 0 24px rgba(40,231,255,.18),0 0 32px rgba(255,45,166,.12);
+}
+
+/* Pop-Art: comic layout */
+body.theme-pop .hero{
+  grid-template-columns:1fr;
+}
+body.theme-pop .hero-main{
+  min-height:280px;padding-right:34%;
+  background:
+    radial-gradient(circle,#111 0 1px,transparent 1.6px) 0 0/10px 10px,
+    #ffe958;
+  border:5px solid #111;
+  box-shadow:10px 10px 0 #111;
+  border-radius:0;
+}
+body.theme-pop .hero-main:before{
+  content:"WOW!";
+  position:absolute;left:22px;top:18px;
+  font-size:1rem;font-weight:1000;color:#fff;background:#ff3b30;
+  padding:7px 12px;border:3px solid #111;transform:rotate(-7deg);
+  box-shadow:4px 4px 0 #111;
+}
+body.theme-pop .scene-pop{
+  display:block;right:28px;top:52px;
+  font-size:2.8rem;font-weight:1000;color:#ff3b30;
+  -webkit-text-stroke:3px #111;
+  transform:rotate(7deg);
+  text-shadow:5px 5px 0 #fff;
+}
+body.theme-pop .scene-disc{
+  display:block;right:64px;bottom:18px;width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle,#18b7ff 0 18%,#111 19% 67%,#333 68% 69%,#111 70%);
+  border:4px solid #111;
+}
+body.theme-pop .scene-arm,
+body.theme-pop .scene-meter,
+body.theme-pop .scene-neon{display:none}
+body.theme-pop .cards{
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+body.theme-pop .record:nth-child(odd){transform:rotate(-1deg)}
+body.theme-pop .record:nth-child(even){transform:rotate(1deg)}
+
+/* Dark: minimal gallery */
+body.theme-dark .theme-scene{display:none}
+body.theme-dark .hero{
+  grid-template-columns:1.4fr .6fr;
+}
+body.theme-dark .hero-main{
+  min-height:210px;
+  background:#0f1216;
+  border-radius:8px;
+  box-shadow:none;
+}
+body.theme-dark .panel{border-radius:8px}
+body.theme-dark .cards{gap:22px}
+body.theme-dark .record{
+  border:0;border-radius:8px;box-shadow:none;background:#11151a;
+}
+body.theme-dark .recbody{padding:12px 4px 4px}
+
+/* Mobile */
+@media(max-width:780px){
+  body.theme-luxury .hero,
+  body.theme-neon .hero,
+  body.theme-dark .hero{grid-template-columns:1fr}
+  body.theme-luxury .hero-main,
+  body.theme-retro .hero-main,
+  body.theme-pop .hero-main{padding-right:18px;padding-bottom:170px}
+  body.theme-luxury .scene-disc{width:145px;height:145px;right:26px;top:auto;bottom:24px}
+  body.theme-luxury .scene-arm{right:28px;top:auto;bottom:28px;height:120px}
+  body.theme-luxury .scene-meter{display:none}
+  body.theme-retro .scene-disc{width:145px;height:145px;right:28px;top:auto;bottom:18px}
+  body.theme-pop .scene-pop{right:20px;top:auto;bottom:100px;font-size:2rem}
+  body.theme-pop .scene-disc{width:105px;height:105px;right:36px}
+  body.theme-retro .cards{grid-template-columns:repeat(2,1fr)}
+}
+
+</style>
 </head>
 <body>
 <header>
