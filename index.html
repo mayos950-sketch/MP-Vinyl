@@ -808,18 +808,106 @@ body.theme-neon #accountBtn{box-shadow:0 0 18px rgba(40,231,255,.12)}
   header{padding:10px 12px}
   .top{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch}
   .brand{width:100%}
-  .header-actions{width:100%;display:grid;grid-template-columns:1fr auto auto;gap:8px}
-  .header-actions .theme-select{max-width:none;width:100%}
-  #langBtn{min-width:52px}
-  #accountBtn{grid-column:1/3;width:100%;font-size:1rem;padding:12px 14px}
-  #exportBtn{grid-column:3/4;width:100%}
+  .header-actions{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    align-items:stretch
+  }
+  #themeSelect{
+    grid-column:1 / -1;
+    width:100%;
+    max-width:none;
+    min-width:0;
+    font-size:1rem;
+    padding:12px 14px
+  }
+  #langBtn,#accountBtn,#exportBtn{
+    width:100%;
+    min-width:0;
+    font-size:1rem;
+    padding:12px 14px
+  }
+  #langBtn{grid-column:1/2}
+  #accountBtn{grid-column:2/3}
+  #exportBtn{grid-column:1 / -1}
 }
-@media(max-width:420px){
-  .header-actions{grid-template-columns:1fr auto}
-  #themeSelect{grid-column:1/2}
-  #langBtn{grid-column:2/3}
-  #accountBtn{grid-column:1/2}
-  #exportBtn{grid-column:2/3}
+
+
+/* Mobile theme fit fixes: luxury + retro fully visible */
+@media(max-width:700px){
+  .luxury-copy,.retro-copy{padding-top:0}
+  body.theme-luxury .luxury-console,
+  body.theme-retro .retro-shop{
+    min-height:auto;
+    padding:18px;
+    overflow:hidden
+  }
+  body.theme-luxury .luxury-console{
+    grid-template-columns:1fr;
+    gap:16px
+  }
+  body.theme-luxury .luxury-copy h1{
+    font-size:clamp(2rem,9vw,3.2rem);
+    max-width:none
+  }
+  body.theme-luxury .luxury-copy p{
+    font-size:1rem;
+    max-width:none;
+    margin-bottom:12px
+  }
+  body.theme-luxury .turntable-unit{
+    min-height:215px;
+    margin-top:6px
+  }
+  body.theme-luxury .platter{
+    width:150px;height:150px;left:auto;right:18px;top:48px
+  }
+  body.theme-luxury .tonearm{
+    height:135px;right:34px;top:46px
+  }
+  body.theme-luxury .vu{
+    left:18px;right:18px;bottom:16px;gap:10px
+  }
+  body.theme-luxury .vu i{height:42px}
+
+  body.theme-retro .retro-shop{
+    grid-template-columns:1fr;
+    min-height:auto;
+    padding:18px 18px 90px
+  }
+  body.theme-retro .retro-sign{
+    position:relative;
+    left:0;top:0;
+    display:inline-block;
+    margin-bottom:12px;
+    font-size:.95rem
+  }
+  body.theme-retro .retro-copy h1{
+    font-size:clamp(2rem,10vw,3.4rem);
+    margin-bottom:8px
+  }
+  body.theme-retro .retro-copy p{
+    font-size:1rem;
+    margin-bottom:12px
+  }
+  body.theme-retro .retro-disc{
+    width:118px;height:118px;
+    position:absolute;
+    right:18px;top:18px;
+    margin:0;
+    opacity:.98
+  }
+  body.theme-retro .retro-shelf{
+    left:12px;right:12px;bottom:10px;height:58px
+  }
+  body.theme-retro .retro-shelf span{width:28px}
+
+  body.theme-neon .neon-stage{min-height:auto;padding:20px}
+  body.theme-neon .neon-sign{font-size:2rem;top:16px;right:16px}
+  body.theme-neon .neon-record{width:150px;height:150px}
+  body.theme-pop .pop-board{min-height:auto}
 }
 
 </style>
