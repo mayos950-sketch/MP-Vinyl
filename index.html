@@ -797,6 +797,10 @@ body.theme-dark .tag{display:none}
 .file-picker-name{font-size:.9rem;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #photoInput{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 
+
+#accountBtn{white-space:nowrap}
+body.theme-neon #accountBtn{box-shadow:0 0 18px rgba(40,231,255,.12)}
+
 </style>
 </head>
 <body>
@@ -804,7 +808,8 @@ body.theme-dark .tag{display:none}
   <div class="top">
     <div class="brand"><div class="logo"></div><div><span style="font-size:1.24rem;letter-spacing:.02em">MP Vinyl</span><br><span class="small" id="brandSub">Meine Plattensammlung</span></div></div>
     <div class="actions"><select id="themeSelect" class="theme-select" aria-label="Design"><option value="luxury">Luxus Hi‑Fi</option><option value="retro">Retro</option><option value="neon">Neon</option><option value="pop">Pop‑Art</option><option value="dark">Dark</option></select><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
-  </div>
+    <button class="btn secondary" id="accountBtn" type="button">Konto</button>
+</div>
 </header>
 
 <main class="wrap">
@@ -903,6 +908,27 @@ body.theme-dark .tag{display:none}
   <div><button class="btn primary" id="addBtnBottom">＋ Neue Platte</button></div>
 </div>
 
+
+<dialog id="authDialog">
+  <form method="dialog" class="modal" id="authForm">
+    <div class="row">
+      <h2 id="authTitle">Konto</h2>
+      <button class="btn secondary" type="button" id="closeAuth">✕</button>
+    </div>
+    <p class="small" id="authText">Melde dich an, damit deine Sammlung auf iPhone und PC synchron bleibt.</p>
+    <label id="emailLabel">E-Mail</label>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com">
+    <label id="passwordLabel">Passwort</label>
+    <input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="••••••••">
+    <div class="actions" style="margin-top:14px">
+      <button class="btn primary" type="button" id="signInBtn">Anmelden</button>
+      <button class="btn secondary" type="button" id="signUpBtn">Registrieren</button>
+      <button class="btn danger" type="button" id="signOutBtn" style="display:none">Abmelden</button>
+    </div>
+    <p class="small" id="authStatus" style="margin-top:12px"></p>
+  </form>
+</dialog>
+
 <dialog id="recordDialog">
   <form method="dialog" class="modal" id="recordForm">
     <div class="row">
@@ -925,8 +951,8 @@ body.theme-dark .tag{display:none}
     <input id="coverUrl" placeholder="https://…">
 
     <div class="grid2">
-      <div><label>Interpret</label><input id="artist" required placeholder="f.eks. Pink Floyd" id="artistInput"></div>
-      <div><label>Album</label><input id="album" required placeholder="f.eks. The Dark Side of the Moon" id="albumInput"></div>
+      <div><label>Interpret</label><input id="artist" required placeholder="f.eks. Pink Floyd"></div>
+      <div><label>Album</label><input id="album" required placeholder="f.eks. The Dark Side of the Moon"></div>
     </div>
     <div class="grid2">
       <div><label>Jahr</label><input id="year" inputmode="numeric" placeholder="1973"></div>
@@ -942,17 +968,81 @@ body.theme-dark .tag{display:none}
   </form>
 </dialog>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const STORAGE_KEY = 'mp-vinyl-records-v1';
 let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 let editId = null;
 let photoData = '';
 
+const SUPABASE_URL = 'https://ngbineemnuvrasvffopv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable__qc-ad5QfgcRLzODUeKsIA_mb8mME6h';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null;
+let cloudReady = false;
+
+
 const $ = id => document.getElementById(id);
 const cards = $('cards');
 const dlg = $('recordDialog');
 
-function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); render(); }
+function saveLocal(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  render();
+}
+async function pushRecordToCloud(record){
+  if(!currentUser) return;
+  const payload = {
+    id: record.id,
+    user_id: currentUser.id,
+    artist: record.artist || '',
+    album: record.album || '',
+    release_year: record.year ? Number(record.year) : null,
+    genre: record.genre || '',
+    tracks: record.tracks || [],
+    cover_url: record.coverUrl || '',
+    cover_data: record.photoData || ''
+  };
+  const { error } = await supabaseClient.from('vinyl_records').upsert(payload, {onConflict:'id'});
+  if(error) console.error('Cloud sync error', error);
+}
+async function deleteRecordFromCloud(id){
+  if(!currentUser) return;
+  const { error } = await supabaseClient.from('vinyl_records').delete().eq('id', id);
+  if(error) console.error('Cloud delete error', error);
+}
+async function loadCloudRecords(){
+  if(!currentUser) return;
+  const { data, error } = await supabaseClient
+    .from('vinyl_records')
+    .select('*')
+    .order('updated_at', {ascending:false});
+  if(error){ console.error('Cloud load error', error); return; }
+
+  if((data || []).length === 0 && records.length){
+    for(const r of records) await pushRecordToCloud(r);
+    cloudReady = true;
+    updateAuthUI();
+    return;
+  }
+
+  if((data || []).length){
+    records = data.map(r => ({
+      id:r.id,
+      artist:r.artist || '',
+      album:r.album || '',
+      year:r.release_year ? String(r.release_year) : '',
+      genre:r.genre || '',
+      tracks:r.tracks || [],
+      coverUrl:r.cover_url || '',
+      photoData:r.cover_data || '',
+      created: r.created_at ? new Date(r.created_at).getTime() : Date.now()
+    }));
+    saveLocal();
+  }
+  cloudReady = true;
+  updateAuthUI();
+}
 
 function escapeHtml(s=''){
   return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
@@ -1019,7 +1109,7 @@ window.openEdit = function(id){
   dlg.showModal();
 }
 
-$('recordForm').addEventListener('submit', e=>{
+$('recordForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const data = {
     id: editId || crypto.randomUUID(),
@@ -1033,7 +1123,7 @@ $('recordForm').addEventListener('submit', e=>{
     created: editId ? (records.find(x=>x.id===editId)?.created || Date.now()) : Date.now()
   };
   if(editId) records = records.map(r=>r.id===editId?data:r); else records.push(data);
-  saveLocal(); dlg.close();
+  saveLocal(); await pushRecordToCloud(data); dlg.close();
 });
 
 $('photoInput').addEventListener('change', e=>{
@@ -1043,10 +1133,10 @@ $('photoInput').addEventListener('change', e=>{
   reader.readAsDataURL(f);
 });
 
-$('deleteBtn').onclick=()=>{
+$('deleteBtn').onclick=async ()=>{
   if(!editId) return;
   if(confirm(i18n[lang].confirmDelete)){
-    records=records.filter(r=>r.id!==editId); saveLocal(); dlg.close();
+    const deletingId=editId; records=records.filter(r=>r.id!==editId); saveLocal(); await deleteRecordFromCloud(deletingId); dlg.close();
   }
 };
 
@@ -1065,15 +1155,88 @@ $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=e=>{
   const f=e.target.files?.[0]; if(!f) return;
   const reader=new FileReader();
-  reader.onload=()=>{
+  reader.onload=async ()=>{
     try{
       const data=JSON.parse(reader.result);
       if(!Array.isArray(data)) throw new Error();
-      records=data; saveLocal(); alert(i18n[lang].loaded);
+      records=data; saveLocal(); if(currentUser){ for(const r of records) await pushRecordToCloud(r); } alert(i18n[lang].loaded);
     }catch{ alert(i18n[lang].invalid); }
   };
   reader.readAsText(f);
 };
+
+
+const authDlg = $('authDialog');
+
+function updateAuthUI(){
+  const isNO = (typeof lang !== 'undefined' ? lang : 'de') === 'no';
+  if($('accountBtn')){
+    $('accountBtn').textContent = currentUser
+      ? (isNO ? 'Konto ✓' : 'Konto ✓')
+      : (isNO ? 'Logg inn' : 'Anmelden');
+  }
+  if($('authTitle')) $('authTitle').textContent = isNO ? 'Konto' : 'Konto';
+  if($('authText')) $('authText').textContent = currentUser
+    ? (isNO ? `Innlogget som ${currentUser.email}` : `Angemeldet als ${currentUser.email}`)
+    : (isNO ? 'Logg inn for å synkronisere platesamlingen mellom iPhone og PC.' : 'Melde dich an, damit deine Sammlung auf iPhone und PC synchron bleibt.');
+  if($('emailLabel')) $('emailLabel').textContent = 'E-Mail';
+  if($('passwordLabel')) $('passwordLabel').textContent = isNO ? 'Passord' : 'Passwort';
+  if($('signInBtn')) $('signInBtn').textContent = isNO ? 'Logg inn' : 'Anmelden';
+  if($('signUpBtn')) $('signUpBtn').textContent = isNO ? 'Registrer' : 'Registrieren';
+  if($('signOutBtn')){
+    $('signOutBtn').textContent = isNO ? 'Logg ut' : 'Abmelden';
+    $('signOutBtn').style.display = currentUser ? 'inline-block' : 'none';
+  }
+  if($('signInBtn')) $('signInBtn').style.display = currentUser ? 'none' : 'inline-block';
+  if($('signUpBtn')) $('signUpBtn').style.display = currentUser ? 'none' : 'inline-block';
+}
+
+$('accountBtn')?.addEventListener('click', ()=>{ updateAuthUI(); authDlg.showModal(); });
+$('closeAuth')?.addEventListener('click', ()=>authDlg.close());
+
+$('signInBtn')?.addEventListener('click', async ()=>{
+  const email=$('authEmail').value.trim();
+  const password=$('authPassword').value;
+  $('authStatus').textContent = (typeof lang!=='undefined' && lang==='no') ? 'Logger inn …' : 'Anmeldung …';
+  const { data, error } = await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){ $('authStatus').textContent=error.message; return; }
+  currentUser=data.user; $('authStatus').textContent='';
+  updateAuthUI(); await loadCloudRecords(); authDlg.close();
+});
+
+$('signUpBtn')?.addEventListener('click', async ()=>{
+  const email=$('authEmail').value.trim();
+  const password=$('authPassword').value;
+  if(!email || password.length<6){
+    $('authStatus').textContent=(typeof lang!=='undefined' && lang==='no') ? 'Skriv inn e-post og minst 6 tegn i passordet.' : 'E-Mail und mindestens 6 Zeichen Passwort eingeben.';
+    return;
+  }
+  const { data, error } = await supabaseClient.auth.signUp({email,password});
+  if(error){ $('authStatus').textContent=error.message; return; }
+  if(data.session){
+    currentUser=data.user; updateAuthUI(); await loadCloudRecords(); authDlg.close();
+  } else {
+    $('authStatus').textContent=(typeof lang!=='undefined' && lang==='no')
+      ? 'Sjekk e-posten din og bekreft registreringen. Deretter kan du logge inn.'
+      : 'Bitte E-Mail prüfen und Registrierung bestätigen. Danach kannst du dich anmelden.';
+  }
+});
+
+$('signOutBtn')?.addEventListener('click', async ()=>{
+  await supabaseClient.auth.signOut();
+  currentUser=null; cloudReady=false; updateAuthUI(); authDlg.close();
+});
+
+supabaseClient.auth.getSession().then(async ({data})=>{
+  currentUser=data.session?.user || null;
+  updateAuthUI();
+  if(currentUser) await loadCloudRecords();
+});
+
+supabaseClient.auth.onAuthStateChange(async (_event, session)=>{
+  currentUser=session?.user || null;
+  updateAuthUI();
+});
 
 let lang = localStorage.getItem('mp-vinyl-lang') || 'de';
 const i18n = {
@@ -1175,7 +1338,7 @@ function applyLang(){
 
   render();
 }
-$('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
+$('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang(); updateAuthUI();};
 applyLang();
 
 
