@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111111" />
+  <title>MP Vinyl – Plattensammlung</title>
+  <style>
+    :root{
+      --bg:#0d0f12;--card:#16191e;--card2:#1e2229;--text:#f4f4f4;--muted:#aeb4bf;
+      --accent:#e2b84b;--line:#2c323b;--danger:#c94d4d;--ok:#4caf7d;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b0d10,#12151a 55%,#0b0d10);
+      color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+    header{position:sticky;top:0;z-index:5;background:rgba(13,15,18,.92);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);padding:14px 16px}
+    .top{max-width:1100px;margin:auto;display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.15rem}
+    .logo{width:42px;height:42px;border-radius:50%;background:
+      radial-gradient(circle at 50% 50%,#111 0 10%,var(--accent) 11% 16%,#111 17% 49%,#222 50% 52%,#111 53% 72%,#222 73% 75%,#111 76%);
+      box-shadow:0 0 0 2px #000,0 0 0 3px #3a3a3a}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 90px}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-bottom:18px}
+    .panel{background:rgba(22,25,30,.94);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 14px 36px rgba(0,0,0,.22)}
+    h1,h2,h3{margin:0 0 10px}
+    h1{font-size:clamp(1.55rem,4vw,2.35rem)}
+    p{color:var(--muted);line-height:1.45}
+    .btn{border:0;border-radius:12px;padding:12px 15px;font-weight:750;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#16120a}
+    .btn.secondary{background:#272c34;color:#fff;border:1px solid #373e48}
+    .btn.danger{background:#3a2020;color:#ffd9d9;border:1px solid #663030}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    input,select,textarea{width:100%;background:#0f1216;color:#fff;border:1px solid #353c46;border-radius:11px;
+      padding:11px 12px;font:inherit}
+    label{display:block;font-size:.86rem;color:#cbd0d8;margin:9px 0 5px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .search{display:flex;gap:9px;margin:16px 0}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .stat{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+    .stat b{display:block;font-size:1.35rem;color:var(--accent)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .record{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+    .cover{aspect-ratio:1/1;background:#0b0d10;display:grid;place-items:center;overflow:hidden}
+    .cover img{width:100%;height:100%;object-fit:cover}
+    .placeholder{font-size:4rem;opacity:.55}
+    .recbody{padding:13px}
+    .recbody h3{font-size:1.03rem}
+    .small{font-size:.88rem;color:var(--muted)}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#252a31;color:#ddd;font-size:.78rem;margin:3px 4px 0 0}
+    .empty{grid-column:1/-1;text-align:center;padding:34px;color:var(--muted);border:1px dashed #39414b;border-radius:16px}
+    dialog{border:1px solid var(--line);background:#14171c;color:#fff;border-radius:18px;width:min(700px,94vw);padding:0}
+    dialog::backdrop{background:rgba(0,0,0,.72)}
+    .modal{padding:16px}
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .cameraBox{border:1px dashed #49515c;border-radius:14px;padding:14px;text-align:center;margin:10px 0}
+    #photoPreview{max-width:180px;max-height:180px;border-radius:12px;display:none;margin:10px auto}
+    .footerbar{position:fixed;left:0;right:0;bottom:0;background:rgba(13,15,18,.94);backdrop-filter:blur(12px);
+      border-top:1px solid var(--line);padding:10px 14px}
+    .footerbar>div{max-width:1100px;margin:auto;display:flex;gap:8px}
+    .footerbar button{flex:1}
+    @media(max-width:780px){
+      .hero{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){.cards{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand"><div class="logo"></div><div>MP Vinyl<br><span class="small">Meine Plattensammlung</span></div></div>
+    <button class="btn secondary" id="exportBtn">Sicherung</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="panel">
+      <h1>Platte fotografieren. Rest eintragen. Fertig.</h1>
+      <p>Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
+      <div class="actions">
+        <button class="btn primary" id="addBtn">＋ Platte hinzufügen</button>
+        <button class="btn secondary" id="importBtn">Sicherung laden</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Sammlung</h2>
+      <div class="stats">
+        <div class="stat"><b id="countStat">0</b><span class="small">Platten</span></div>
+        <div class="stat"><b id="artistStat">0</b><span class="small">Interpreten</span></div>
+        <div class="stat"><b id="genreStat">0</b><span class="small">Genres</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="search">
+    <input id="searchInput" placeholder="Suchen nach Interpret, Album, Jahr oder Genre …">
+    <select id="sortSelect" style="max-width:180px">
+      <option value="newest">Neueste zuerst</option>
+      <option value="artist">Interpret A–Z</option>
+      <option value="album">Album A–Z</option>
+      <option value="year">Jahr</option>
+    </select>
+  </div>
+
+  <section id="cards" class="cards"></section>
+</main>
+
+<div class="footerbar">
+  <div><button class="btn primary" id="addBtnBottom">＋ Neue Platte</button></div>
+</div>
+
+<dialog id="recordDialog">
+  <form method="dialog" class="modal" id="recordForm">
+    <div class="row">
+      <h2 id="dialogTitle">Platte hinzufügen</h2>
+      <button class="btn secondary" value="cancel" type="button" id="closeDialog">✕</button>
+    </div>
+
+    <div class="cameraBox">
+      <strong>Cover fotografieren oder auswählen</strong>
+      <p class="small">Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.</p>
+      <input type="file" id="photoInput" accept="image/*" capture="environment">
+      <img id="photoPreview" alt="Cover Vorschau">
+    </div>
+
+    <label>Cover-URL aus dem Internet</label>
+    <input id="coverUrl" placeholder="https://…">
+
+    <div class="grid2">
+      <div><label>Interpret</label><input id="artist" required placeholder="z. B. Pink Floyd"></div>
+      <div><label>Album</label><input id="album" required placeholder="z. B. The Dark Side of the Moon"></div>
+    </div>
+    <div class="grid2">
+      <div><label>Jahr</label><input id="year" inputmode="numeric" placeholder="1973"></div>
+      <div><label>Musikrichtung</label><input id="genre" placeholder="Rock"></div>
+    </div>
+    <label>Titelliste</label>
+    <textarea id="tracks" rows="6" placeholder="Ein Titel pro Zeile"></textarea>
+
+    <div class="actions" style="margin-top:14px">
+      <button class="btn primary" id="saveBtn" type="submit">Speichern</button>
+      <button class="btn danger" id="deleteBtn" type="button" style="display:none">Löschen</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const STORAGE_KEY = 'mp-vinyl-records-v1';
+let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let editId = null;
+let photoData = '';
+
+const $ = id => document.getElementById(id);
+const cards = $('cards');
+const dlg = $('recordDialog');
+
+function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); render(); }
+
+function escapeHtml(s=''){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+
+function render(){
+  const q = $('searchInput').value.trim().toLowerCase();
+  const sort = $('sortSelect').value;
+  let list = records.filter(r => [r.artist,r.album,r.year,r.genre,(r.tracks||[]).join(' ')].join(' ').toLowerCase().includes(q));
+
+  list.sort((a,b)=>{
+    if(sort==='artist') return (a.artist||'').localeCompare(b.artist||'');
+    if(sort==='album') return (a.album||'').localeCompare(b.album||'');
+    if(sort==='year') return (b.year||0)-(a.year||0);
+    return (b.created||0)-(a.created||0);
+  });
+
+  $('countStat').textContent = records.length;
+  $('artistStat').textContent = new Set(records.map(r=>r.artist).filter(Boolean)).size;
+  $('genreStat').textContent = new Set(records.map(r=>r.genre).filter(Boolean)).size;
+
+  if(!list.length){
+    cards.innerHTML = `<div class="empty">Noch keine Platten gefunden.<br><br><button class="btn primary" onclick="openNew()">Erste Platte hinzufügen</button></div>`;
+    return;
+  }
+
+  cards.innerHTML = list.map(r=>{
+    const cover = r.photoData || r.coverUrl;
+    return `<article class="record" onclick="openEdit('${r.id}')">
+      <div class="cover">${cover ? `<img src="${escapeHtml(cover)}" alt="">` : `<div class="placeholder">💿</div>`}</div>
+      <div class="recbody">
+        <h3>${escapeHtml(r.album || 'Ohne Titel')}</h3>
+        <div>${escapeHtml(r.artist || '')}</div>
+        <div class="small">${escapeHtml(r.year || '')}</div>
+        ${r.genre ? `<span class="tag">${escapeHtml(r.genre)}</span>` : ''}
+        ${r.tracks?.length ? `<span class="tag">${r.tracks.length} Titel</span>` : ''}
+      </div>
+    </article>`;
+  }).join('');
+}
+
+window.openNew = function(){
+  editId=null; photoData='';
+  $('recordForm').reset();
+  $('photoPreview').style.display='none';
+  $('deleteBtn').style.display='none';
+  $('dialogTitle').textContent='Platte hinzufügen';
+  dlg.showModal();
+}
+
+window.openEdit = function(id){
+  const r = records.find(x=>x.id===id); if(!r) return;
+  editId=id; photoData=r.photoData||'';
+  $('artist').value=r.artist||'';
+  $('album').value=r.album||'';
+  $('year').value=r.year||'';
+  $('genre').value=r.genre||'';
+  $('tracks').value=(r.tracks||[]).join('\n');
+  $('coverUrl').value=r.coverUrl||'';
+  if(photoData){ $('photoPreview').src=photoData; $('photoPreview').style.display='block'; }
+  else $('photoPreview').style.display='none';
+  $('deleteBtn').style.display='inline-block';
+  $('dialogTitle').textContent='Platte bearbeiten';
+  dlg.showModal();
+}
+
+$('recordForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const data = {
+    id: editId || crypto.randomUUID(),
+    artist:$('artist').value.trim(),
+    album:$('album').value.trim(),
+    year:$('year').value.trim(),
+    genre:$('genre').value.trim(),
+    tracks:$('tracks').value.split('\n').map(x=>x.trim()).filter(Boolean),
+    coverUrl:$('coverUrl').value.trim(),
+    photoData,
+    created: editId ? (records.find(x=>x.id===editId)?.created || Date.now()) : Date.now()
+  };
+  if(editId) records = records.map(r=>r.id===editId?data:r); else records.push(data);
+  saveLocal(); dlg.close();
+});
+
+$('photoInput').addEventListener('change', e=>{
+  const f=e.target.files?.[0]; if(!f) return;
+  const reader=new FileReader();
+  reader.onload=()=>{photoData=reader.result; $('photoPreview').src=photoData; $('photoPreview').style.display='block';};
+  reader.readAsDataURL(f);
+});
+
+$('deleteBtn').onclick=()=>{
+  if(!editId) return;
+  if(confirm('Diese Platte wirklich löschen?')){
+    records=records.filter(r=>r.id!==editId); saveLocal(); dlg.close();
+  }
+};
+
+$('closeDialog').onclick=()=>dlg.close();
+$('addBtn').onclick=openNew;
+$('addBtnBottom').onclick=openNew;
+$('searchInput').oninput=render;
+$('sortSelect').onchange=render;
+
+$('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='MP-Vinyl-Sicherung.json'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=e=>{
+  const f=e.target.files?.[0]; if(!f) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(!Array.isArray(data)) throw new Error();
+      records=data; saveLocal(); alert('Sicherung geladen.');
+    }catch{ alert('Die Datei ist keine gültige MP-Vinyl-Sicherung.'); }
+  };
+  reader.readAsText(f);
+};
+
+render();
+</script>
+</body>
+</html>
