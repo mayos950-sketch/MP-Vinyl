@@ -409,6 +409,112 @@ body.theme-dark .recbody{padding:12px 4px 4px}
   body.theme-retro .cards{grid-template-columns:repeat(2,1fr)}
 }
 
+
+/* STRUCTURAL THEME VIEWS */
+.experience{display:grid;gap:18px}
+.theme-layout{display:none;position:relative;overflow:hidden}
+body.theme-luxury .luxury-layout{display:grid}
+body.theme-retro .retro-layout{display:grid}
+body.theme-neon .neon-layout{display:grid}
+body.theme-pop .pop-layout{display:grid}
+body.theme-dark .dark-layout{display:flex}
+
+/* luxury */
+.luxury-console{
+  grid-template-columns:1.1fr .9fr;min-height:360px;padding:28px;
+  border:1px solid rgba(232,190,111,.28);border-radius:18px;
+  background:
+    linear-gradient(90deg,rgba(38,24,13,.96),rgba(12,10,8,.98)),
+    repeating-linear-gradient(0deg,rgba(119,72,37,.14) 0 2px,transparent 2px 8px);
+  box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.03)
+}
+.luxury-copy{align-self:center;max-width:560px}
+.eyebrow{font-size:.74rem;letter-spacing:.22em;font-weight:900;color:var(--accent2);margin-bottom:12px}
+.turntable-unit{position:relative;min-height:300px;border-radius:14px;background:linear-gradient(145deg,#2b2118,#15110d);box-shadow:inset 0 0 0 1px #584127,0 18px 40px rgba(0,0,0,.4)}
+.platter{position:absolute;width:210px;height:210px;border-radius:50%;left:28px;top:28px;background:radial-gradient(circle,#c9a24c 0 8%,#111 9% 26%,#242424 27% 28%,#090909 29% 50%,#242424 51% 52%,#090909 53%);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.tonearm{position:absolute;width:17px;height:190px;right:44px;top:40px;border-radius:10px;background:linear-gradient(90deg,#bcbcbc,#555,#eee);transform:rotate(19deg);transform-origin:top center}
+.vu{position:absolute;display:flex;gap:14px;left:26px;right:26px;bottom:22px}
+.vu i{flex:1;height:52px;border:2px solid #6c4b28;border-radius:7px;background:linear-gradient(#f0d68e,#bc843d);position:relative}
+.vu i:after{content:"";position:absolute;width:2px;height:32px;background:#40230e;left:50%;bottom:6px;transform:rotate(25deg);transform-origin:bottom}
+
+/* retro */
+.retro-shop{
+  min-height:350px;padding:28px 32px;grid-template-columns:1fr 280px;align-items:center;
+  border:5px solid #75451f;border-radius:4px;
+  background:
+    linear-gradient(rgba(242,211,157,.93),rgba(242,211,157,.93)),
+    repeating-linear-gradient(90deg,#9a6034 0 2px,#774722 2px 6px);
+  box-shadow:10px 10px 0 #9a6034
+}
+.retro-sign{position:absolute;left:24px;top:18px;font-weight:1000;letter-spacing:.09em;color:#8d361f;transform:rotate(-2deg);font-size:.9rem}
+.retro-copy h1{font-family:Georgia,serif;font-size:2.7rem;color:#4a2b18;max-width:540px}
+.retro-copy p{color:#6f4628}
+.retro-disc{width:190px;height:190px;border-radius:50%;justify-self:center;background:radial-gradient(circle,#e77d3c 0 16%,#121212 17% 38%,#292929 39% 40%,#111 41% 62%,#2b2b2b 63% 64%,#111 65%);box-shadow:8px 8px 0 rgba(80,44,20,.3)}
+.retro-shelf{position:absolute;left:20px;right:20px;bottom:14px;height:55px;display:flex;gap:8px;align-items:end;border-bottom:8px solid #6e3f20}
+.retro-shelf span{width:28px;background:#8f301f;border:2px solid #572016}
+.retro-shelf span:nth-child(1){height:41px}.retro-shelf span:nth-child(2){height:50px;background:#c96e2f}.retro-shelf span:nth-child(3){height:45px;background:#d9b24a}.retro-shelf span:nth-child(4){height:52px;background:#4e7986}.retro-shelf span:nth-child(5){height:39px;background:#61422e}
+
+/* neon */
+.neon-stage{
+  min-height:360px;grid-template-columns:1fr .75fr;align-items:center;padding:32px;
+  background:
+    linear-gradient(180deg,rgba(5,5,18,.9),rgba(3,3,10,.98)),
+    repeating-linear-gradient(90deg,transparent 0 38px,rgba(36,226,255,.035) 39px 40px);
+  border:1px solid rgba(40,231,255,.48);border-radius:20px;
+  box-shadow:0 0 40px rgba(40,231,255,.13),inset 0 0 60px rgba(255,45,166,.07)
+}
+.neon-sign{position:absolute;right:38px;top:30px;font-size:2.5rem;font-weight:1000;letter-spacing:.08em;color:#fff;text-shadow:0 0 5px #fff,0 0 12px #28e7ff,0 0 25px #28e7ff,0 0 42px #ff2da6;transform:rotate(-4deg)}
+.neon-copy{max-width:520px}
+.neon-copy h1{font-size:2.5rem}
+.neon-record{width:190px;height:190px;border-radius:50%;justify-self:center;background:radial-gradient(circle,#ff2da6 0 13%,#080808 14% 40%,#303030 41% 42%,#090909 43% 66%,#2a2a2a 67% 68%,#090909 69%);box-shadow:0 0 24px rgba(255,45,166,.4),0 0 45px rgba(40,231,255,.15)}
+
+/* pop */
+.pop-board{
+  min-height:350px;padding:32px;align-content:center;
+  border:5px solid #111;border-radius:0;
+  background:
+    radial-gradient(circle,#111 0 1px,transparent 1.5px) 0 0/10px 10px,
+    #ffe74a;
+  box-shadow:12px 12px 0 #111
+}
+.burst{position:absolute;left:24px;top:20px;background:#ff3b30;color:#fff;border:4px solid #111;padding:9px 13px;font-weight:1000;transform:rotate(-8deg);box-shadow:5px 5px 0 #111}
+.pop-title{font-size:4rem;line-height:.9;font-weight:1000;color:#ff3b30;-webkit-text-stroke:3px #111;text-shadow:5px 5px 0 #fff;max-width:600px}
+.pop-sub{font-weight:1000;color:#111;font-size:1.1rem}
+.pop-record{position:absolute;right:42px;bottom:28px;width:170px;height:170px;border-radius:50%;border:5px solid #111;background:radial-gradient(circle,#1cbcff 0 18%,#111 19% 66%,#333 67% 68%,#111 69%)}
+
+/* dark */
+.dark-gallery{
+  min-height:190px;padding:28px;align-items:center;justify-content:space-between;
+  background:#0f1216;border:1px solid #222a33;border-radius:10px
+}
+.dark-gallery h1{font-size:2.8rem;margin-bottom:4px}
+
+/* cards change with theme */
+body.theme-luxury .cards{grid-template-columns:repeat(3,1fr);gap:18px}
+body.theme-luxury .record{border-radius:10px}
+body.theme-retro .cards{grid-template-columns:repeat(4,1fr);padding:16px;background:rgba(99,60,32,.16);border:4px solid #75451f}
+body.theme-retro .record{border-radius:3px}
+body.theme-neon .cards{grid-template-columns:repeat(3,1fr);padding:14px;border-radius:18px;background:rgba(6,7,22,.55)}
+body.theme-pop .cards{grid-template-columns:repeat(2,1fr);gap:22px}
+body.theme-pop .record{border-radius:0;border:4px solid #111;box-shadow:7px 7px 0 #111}
+body.theme-dark .cards{grid-template-columns:repeat(3,1fr);gap:24px}
+body.theme-dark .record{border:0;box-shadow:none;border-radius:8px}
+
+.collection-strip{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.collection-strip .stats{min-width:310px}
+
+@media(max-width:780px){
+  .luxury-console,.retro-shop,.neon-stage{grid-template-columns:1fr;padding:22px}
+  .turntable-unit{margin-top:16px;min-height:270px}
+  .retro-disc,.neon-record{margin:20px auto 60px}
+  .retro-shelf{bottom:10px}
+  .pop-board{padding-bottom:190px}
+  .pop-title{font-size:3rem}
+  .collection-strip{display:block}
+  .collection-strip .stats{min-width:0;margin-top:12px}
+  body.theme-retro .cards,body.theme-luxury .cards,body.theme-neon .cards,body.theme-dark .cards{grid-template-columns:repeat(2,1fr)}
+}
+
 </style>
 </head>
 <body>
@@ -420,17 +526,76 @@ body.theme-dark .recbody{padding:12px 4px 4px}
 </header>
 
 <main class="wrap">
-  <section class="hero">
-    <div class="panel">
-      <h1 id="heroTitle">Platte fotografieren. Rest eintragen. Fertig.</h1>
-      <p id="heroText">Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
-      <div class="actions">
-        <button class="btn primary" id="addBtn">＋ Platte hinzufügen</button>
-        <button class="btn secondary" id="importBtn">Sicherung laden</button>
-        <input type="file" id="importFile" accept=".json,application/json" hidden>
+  <section class="experience" id="experience">
+    <div class="luxury-console theme-layout luxury-layout">
+      <div class="luxury-copy">
+        <div class="eyebrow">MP VINYL • HI‑FI COLLECTION</div>
+        <h1 id="heroTitle">Platte fotografieren. Rest eintragen. Fertig.</h1>
+        <p id="heroText">Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
+        <div class="actions">
+          <button class="btn primary" id="addBtn">＋ Platte hinzufügen</button>
+          <button class="btn secondary" id="importBtn">Sicherung laden</button>
+          <input type="file" id="importFile" accept=".json,application/json" hidden>
+        </div>
+      </div>
+      <div class="turntable-unit">
+        <div class="platter"></div><div class="tonearm"></div>
+        <div class="vu"><i></i><i></i></div>
       </div>
     </div>
-    <div class="panel">
+
+    <div class="retro-shop theme-layout retro-layout">
+      <div class="retro-sign">MP VINYL RECORD SHOP</div>
+      <div class="retro-copy">
+        <h1>Meine Plattensammlung</h1>
+        <p>Stöbern, hinzufügen, wiederfinden.</p>
+        <div class="actions">
+          <button class="btn primary" data-action="add">＋ Neue Platte</button>
+          <button class="btn secondary" data-action="import">Sicherung laden</button>
+        </div>
+      </div>
+      <div class="retro-disc"></div>
+      <div class="retro-shelf"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="neon-stage theme-layout neon-layout">
+      <div class="neon-sign">MP VINYL</div>
+      <div class="neon-copy">
+        <div class="eyebrow">RECORD BAR</div>
+        <h1>Deine Sammlung im Neonlicht</h1>
+        <p>Cover, Künstler, Jahr und Genre – alles auf einen Blick.</p>
+        <div class="actions">
+          <button class="btn primary" data-action="add">＋ Add Record</button>
+          <button class="btn secondary" data-action="import">Backup</button>
+        </div>
+      </div>
+      <div class="neon-record"></div>
+    </div>
+
+    <div class="pop-board theme-layout pop-layout">
+      <div class="burst">WOW!</div>
+      <div class="pop-title">MP VINYL!</div>
+      <p class="pop-sub">DEINE PLATTEN. DEIN SOUND.</p>
+      <div class="actions">
+        <button class="btn primary" data-action="add">＋ NEUE PLATTE!</button>
+        <button class="btn secondary" data-action="import">BACKUP!</button>
+      </div>
+      <div class="pop-record"></div>
+    </div>
+
+    <div class="dark-gallery theme-layout dark-layout">
+      <div>
+        <div class="eyebrow">MP VINYL</div>
+        <h1>Deine Sammlung.</h1>
+        <p>Ruhig. Schnell. Übersichtlich.</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-action="add">＋ Platte</button>
+        <button class="btn secondary" data-action="import">Sicherung</button>
+      </div>
+    </div>
+
+    <div class="collection-strip panel">
       <h2 id="collectionTitle">Sammlung</h2>
       <div class="stats">
         <div class="stat"><b id="countStat">0</b><span class="small" id="statRecordsLabel">Platten</span></div>
@@ -439,8 +604,7 @@ body.theme-dark .recbody{padding:12px 4px 4px}
       </div>
     </div>
   </section>
-
-  <div class="search">
+<div class="search">
     <input id="searchInput" placeholder="Suchen nach Interpret, Album, Jahr oder Genre …">
     <select id="sortSelect" style="max-width:180px">
       <option value="newest" id="sortNewest">Neueste zuerst</option>
@@ -668,6 +832,9 @@ if(themeSelect){
   });
 }
 applyTheme();
+
+document.querySelectorAll('[data-action="add"]').forEach(b=>b.addEventListener('click',openNew));
+document.querySelectorAll('[data-action="import"]').forEach(b=>b.addEventListener('click',()=>document.getElementById('importFile').click()));
 
 </script>
 </body>
