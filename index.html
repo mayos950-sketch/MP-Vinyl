@@ -804,7 +804,7 @@ body.theme-dark .tag{display:none}
   <section class="experience" id="experience">
     <div class="luxury-console theme-layout luxury-layout">
       <div class="luxury-copy">
-        <div class="eyebrow">MP VINYL • HI‑FI COLLECTION</div>
+        <div class="eyebrow" id="luxuryEyebrow">MP VINYL • HI‑FI COLLECTION</div>
         <h1 id="heroTitle">Platte fotografieren. Rest eintragen. Fertig.</h1>
         <p id="heroText">Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
         <div class="actions">
@@ -820,13 +820,13 @@ body.theme-dark .tag{display:none}
     </div>
 
     <div class="retro-shop theme-layout retro-layout">
-      <div class="retro-sign">MP VINYL RECORD SHOP</div>
+      <div class="retro-sign" id="retroSign">MP VINYL RECORD SHOP</div>
       <div class="retro-copy">
-        <h1>Meine Plattensammlung</h1>
-        <p>Stöbern, hinzufügen, wiederfinden.</p>
+        <h1 id="retroTitle">Meine Plattensammlung</h1>
+        <p id="retroText">Stöbern, hinzufügen, wiederfinden.</p>
         <div class="actions">
-          <button class="btn primary" data-action="add">＋ Neue Platte</button>
-          <button class="btn secondary" data-action="import">Sicherung laden</button>
+          <button class="btn primary" data-action="add" id="retroAdd">＋ Neue Platte</button>
+          <button class="btn secondary" data-action="import" id="retroImport">Sicherung laden</button>
         </div>
       </div>
       <div class="retro-disc"></div>
@@ -836,12 +836,12 @@ body.theme-dark .tag{display:none}
     <div class="neon-stage theme-layout neon-layout">
       <div class="neon-sign">MP VINYL</div>
       <div class="neon-copy">
-        <div class="eyebrow">RECORD BAR</div>
-        <h1>Deine Sammlung im Neonlicht</h1>
-        <p>Cover, Künstler, Jahr und Genre – alles auf einen Blick.</p>
+        <div class="eyebrow" id="neonEyebrow">RECORD BAR</div>
+        <h1 id="neonTitle">Deine Sammlung im Neonlicht</h1>
+        <p id="neonText">Cover, Künstler, Jahr und Genre – alles auf einen Blick.</p>
         <div class="actions">
-          <button class="btn primary" data-action="add">＋ Add Record</button>
-          <button class="btn secondary" data-action="import">Backup</button>
+          <button class="btn primary" data-action="add" id="neonAdd">＋ Add Record</button>
+          <button class="btn secondary" data-action="import" id="neonImport">Backup</button>
         </div>
       </div>
       <div class="neon-record"></div>
@@ -849,11 +849,11 @@ body.theme-dark .tag{display:none}
 
     <div class="pop-board theme-layout pop-layout">
       <div class="burst">WOW!</div>
-      <div class="pop-title">MP VINYL!</div>
-      <p class="pop-sub">DEINE PLATTEN. DEIN SOUND.</p>
+      <div class="pop-title" id="popTitle">MP VINYL!</div>
+      <p class="pop-sub" id="popText">DEINE PLATTEN. DEIN SOUND.</p>
       <div class="actions">
-        <button class="btn primary" data-action="add">＋ NEUE PLATTE!</button>
-        <button class="btn secondary" data-action="import">BACKUP!</button>
+        <button class="btn primary" data-action="add" id="popAdd">＋ NEUE PLATTE!</button>
+        <button class="btn secondary" data-action="import" id="popImport">BACKUP!</button>
       </div>
       <div class="pop-record"></div>
     </div>
@@ -861,12 +861,12 @@ body.theme-dark .tag{display:none}
     <div class="dark-gallery theme-layout dark-layout">
       <div>
         <div class="eyebrow">MP VINYL</div>
-        <h1>Deine Sammlung.</h1>
-        <p>Ruhig. Schnell. Übersichtlich.</p>
+        <h1 id="darkTitle">Deine Sammlung.</h1>
+        <p id="darkText">Ruhig. Schnell. Übersichtlich.</p>
       </div>
       <div class="actions">
-        <button class="btn primary" data-action="add">＋ Platte</button>
-        <button class="btn secondary" data-action="import">Sicherung</button>
+        <button class="btn primary" data-action="add" id="darkAdd">＋ Platte</button>
+        <button class="btn secondary" data-action="import" id="darkImport">Sicherung</button>
       </div>
     </div>
 
@@ -1066,8 +1066,8 @@ $('importFile').onchange=e=>{
 
 let lang = localStorage.getItem('mp-vinyl-lang') || 'de';
 const i18n = {
-  de:{brandSub:'Meine Plattensammlung',heroTitle:'Platte fotografieren. Rest eintragen. Fertig.',heroText:'Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.',add:'＋ Platte hinzufügen',import:'Sicherung laden',collection:'Sammlung',records:'Platten',artists:'Interpreten',genres:'Genres',search:'Suchen nach Interpret, Album, Jahr oder Genre …',newest:'Neueste zuerst',artistSort:'Interpret A–Z',albumSort:'Album A–Z',yearSort:'Jahr',bottom:'＋ Neue Platte',backup:'Sicherung',dialogNew:'Platte hinzufügen',dialogEdit:'Platte bearbeiten',camera:'Cover fotografieren oder auswählen',cameraHelp:'Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.',coverUrl:'Cover-URL aus dem Internet',artist:'Interpret',album:'Album',year:'Jahr',genre:'Musikrichtung',tracks:'Titelliste',save:'Speichern',delete:'Löschen',empty:'Noch keine Platten gefunden.',first:'Erste Platte hinzufügen',titles:'Titel',confirmDelete:'Diese Platte wirklich löschen?',loaded:'Sicherung geladen.',invalid:'Die Datei ist keine gültige MP-Vinyl-Sicherung.'},
-  no:{brandSub:'Platesamlingen min',heroTitle:'Ta et bilde av platen – resten ordner du på et øyeblikk.',heroText:'Samle platene dine på mobil og PC – med cover, artist, album, utgivelsesår, sjanger og sporliste.',add:'＋ Legg til en plate',import:'Importer sikkerhetskopi',collection:'Samling',records:'Plater',artists:'Artister',genres:'Sjangre',search:'Søk etter artist, album, år eller sjanger …',newest:'Nyeste først',artistSort:'Artist A–Å',albumSort:'Album A–Å',yearSort:'Utgivelsesår',bottom:'＋ Ny plate',backup:'Backup',dialogNew:'Legg til plate',dialogEdit:'Rediger plate',camera:'Ta bilde av coveret eller velg et bilde',cameraHelp:'På iPhone kan du bruke kameraet eller velge et bilde fra bildebiblioteket.',coverUrl:'Coverlenke fra nettet',artist:'Artist',album:'Album',year:'Utgivelsesår',genre:'Sjanger',tracks:'Sporliste',save:'Lagre',delete:'Slett',empty:'Ingen plater her ennå.',first:'Legg til den første platen',titles:'spor',confirmDelete:'Vil du slette denne platen?',loaded:'Backupen er lastet inn.',invalid:'Denne filen er ikke en gyldig MP Vinyl-sikkerhetskopi.'}
+  de:{luxuryEyebrow:'MP VINYL • HI‑FI COLLECTION',retroSign:'MP VINYL PLATTENLADEN',retroTitle:'Meine Plattensammlung',retroText:'Stöbern, hinzufügen, wiederfinden.',retroAdd:'＋ Neue Platte',retroImport:'Sicherung laden',neonEyebrow:'RECORD BAR',neonTitle:'Deine Sammlung im Neonlicht',neonText:'Cover, Künstler, Jahr und Genre – alles auf einen Blick.',neonAdd:'＋ Platte hinzufügen',neonImport:'Sicherung laden',popTitle:'MP VINYL!',popText:'DEINE PLATTEN. DEIN SOUND.',popAdd:'＋ NEUE PLATTE!',popImport:'SICHERUNG!',darkTitle:'Deine Sammlung.',darkText:'Ruhig. Schnell. Übersichtlich.',darkAdd:'＋ Platte',darkImport:'Sicherung',themeLuxury:'Luxus Hi‑Fi',themeRetro:'Retro',themeNeon:'Neon',themePop:'Pop‑Art',themeDark:'Dark',brandSub:'Meine Plattensammlung',heroTitle:'Platte fotografieren. Rest eintragen. Fertig.',heroText:'Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.',add:'＋ Platte hinzufügen',import:'Sicherung laden',collection:'Sammlung',records:'Platten',artists:'Interpreten',genres:'Genres',search:'Suchen nach Interpret, Album, Jahr oder Genre …',newest:'Neueste zuerst',artistSort:'Interpret A–Z',albumSort:'Album A–Z',yearSort:'Jahr',bottom:'＋ Neue Platte',backup:'Sicherung',dialogNew:'Platte hinzufügen',dialogEdit:'Platte bearbeiten',camera:'Cover fotografieren oder auswählen',cameraHelp:'Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.',coverUrl:'Cover-URL aus dem Internet',artist:'Interpret',album:'Album',year:'Jahr',genre:'Musikrichtung',tracks:'Titelliste',save:'Speichern',delete:'Löschen',empty:'Noch keine Platten gefunden.',first:'Erste Platte hinzufügen',titles:'Titel',confirmDelete:'Diese Platte wirklich löschen?',loaded:'Sicherung geladen.',invalid:'Die Datei ist keine gültige MP-Vinyl-Sicherung.'},
+  no:{luxuryEyebrow:'MP VINYL • HI‑FI-SAMLING',retroSign:'MP VINYL PLATEBUTIKK',retroTitle:'Platesamlingen min',retroText:'Bla, legg til og finn igjen platene dine.',retroAdd:'＋ Ny plate',retroImport:'Importer backup',neonEyebrow:'PLATEBAR',neonTitle:'Samlingen din i neonlys',neonText:'Cover, artist, år og sjanger – alt på ett sted.',neonAdd:'＋ Legg til plate',neonImport:'Importer backup',popTitle:'MP VINYL!',popText:'PLATENE DINE. LYDEN DIN.',popAdd:'＋ NY PLATE!',popImport:'BACKUP!',darkTitle:'Samlingen din.',darkText:'Enkelt. Raskt. Oversiktlig.',darkAdd:'＋ Plate',darkImport:'Backup',themeLuxury:'Luksus Hi‑Fi',themeRetro:'Retro',themeNeon:'Neon',themePop:'Pop‑Art',themeDark:'Mørk',brandSub:'Platesamlingen min',heroTitle:'Ta et bilde av platen – resten ordner du på et øyeblikk.',heroText:'Samle platene dine på mobil og PC – med cover, artist, album, utgivelsesår, sjanger og sporliste.',add:'＋ Legg til en plate',import:'Importer sikkerhetskopi',collection:'Samling',records:'Plater',artists:'Artister',genres:'Sjangre',search:'Søk etter artist, album, år eller sjanger …',newest:'Nyeste først',artistSort:'Artist A–Å',albumSort:'Album A–Å',yearSort:'Utgivelsesår',bottom:'＋ Ny plate',backup:'Backup',dialogNew:'Legg til plate',dialogEdit:'Rediger plate',camera:'Ta bilde av coveret eller velg et bilde',cameraHelp:'På iPhone kan du bruke kameraet eller velge et bilde fra bildebiblioteket.',coverUrl:'Coverlenke fra nettet',artist:'Artist',album:'Album',year:'Utgivelsesår',genre:'Sjanger',tracks:'Sporliste',save:'Lagre',delete:'Slett',empty:'Ingen plater her ennå.',first:'Legg til den første platen',titles:'spor',confirmDelete:'Vil du slette denne platen?',loaded:'Backupen er lastet inn.',invalid:'Denne filen er ikke en gyldig MP Vinyl-sikkerhetskopi.'}
 };
 function applyLang(){
  const t=i18n[lang]; document.documentElement.lang=lang;
@@ -1082,6 +1082,34 @@ function applyLang(){
  document.querySelector('.cameraBox strong').textContent=t.camera; document.querySelector('.cameraBox p').textContent=t.cameraHelp;
  $('saveBtn').textContent=t.save; $('deleteBtn').textContent=t.delete;
  $('dialogTitle').textContent=editId?t.dialogEdit:t.dialogNew;
+ if($('luxuryEyebrow')) $('luxuryEyebrow').textContent=t.luxuryEyebrow;
+ if($('retroSign')) $('retroSign').textContent=t.retroSign;
+ if($('retroTitle')) $('retroTitle').textContent=t.retroTitle;
+ if($('retroText')) $('retroText').textContent=t.retroText;
+ if($('retroAdd')) $('retroAdd').textContent=t.retroAdd;
+ if($('retroImport')) $('retroImport').textContent=t.retroImport;
+ if($('neonEyebrow')) $('neonEyebrow').textContent=t.neonEyebrow;
+ if($('neonTitle')) $('neonTitle').textContent=t.neonTitle;
+ if($('neonText')) $('neonText').textContent=t.neonText;
+ if($('neonAdd')) $('neonAdd').textContent=t.neonAdd;
+ if($('neonImport')) $('neonImport').textContent=t.neonImport;
+ if($('popTitle')) $('popTitle').textContent=t.popTitle;
+ if($('popText')) $('popText').textContent=t.popText;
+ if($('popAdd')) $('popAdd').textContent=t.popAdd;
+ if($('popImport')) $('popImport').textContent=t.popImport;
+ if($('darkTitle')) $('darkTitle').textContent=t.darkTitle;
+ if($('darkText')) $('darkText').textContent=t.darkText;
+ if($('darkAdd')) $('darkAdd').textContent=t.darkAdd;
+ if($('darkImport')) $('darkImport').textContent=t.darkImport;
+ const themeOptions=$('themeSelect')?.options;
+ if(themeOptions){
+   themeOptions[0].text=t.themeLuxury;
+   themeOptions[1].text=t.themeRetro;
+   themeOptions[2].text=t.themeNeon;
+   themeOptions[3].text=t.themePop;
+   themeOptions[4].text=t.themeDark;
+ }
+
  render();
 }
 $('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
