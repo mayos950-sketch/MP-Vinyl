@@ -68,16 +68,16 @@
 <body>
 <header>
   <div class="top">
-    <div class="brand"><div class="logo"></div><div>MP Vinyl<br><span class="small">Meine Plattensammlung</span></div></div>
-    <button class="btn secondary" id="exportBtn">Sicherung</button>
+    <div class="brand"><div class="logo"></div><div>MP Vinyl<br><span class="small" id="brandSub">Meine Plattensammlung</span></div></div>
+    <div class="actions"><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero">
     <div class="panel">
-      <h1>Platte fotografieren. Rest eintragen. Fertig.</h1>
-      <p>Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
+      <h1 id="heroTitle">Platte fotografieren. Rest eintragen. Fertig.</h1>
+      <p id="heroText">Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.</p>
       <div class="actions">
         <button class="btn primary" id="addBtn">＋ Platte hinzufügen</button>
         <button class="btn secondary" id="importBtn">Sicherung laden</button>
@@ -85,11 +85,11 @@
       </div>
     </div>
     <div class="panel">
-      <h2>Sammlung</h2>
+      <h2 id="collectionTitle">Sammlung</h2>
       <div class="stats">
-        <div class="stat"><b id="countStat">0</b><span class="small">Platten</span></div>
-        <div class="stat"><b id="artistStat">0</b><span class="small">Interpreten</span></div>
-        <div class="stat"><b id="genreStat">0</b><span class="small">Genres</span></div>
+        <div class="stat"><b id="countStat">0</b><span class="small" id="statRecordsLabel">Platten</span></div>
+        <div class="stat"><b id="artistStat">0</b><span class="small" id="statArtistsLabel">Interpreten</span></div>
+        <div class="stat"><b id="genreStat">0</b><span class="small" id="statGenresLabel">Genres</span></div>
       </div>
     </div>
   </section>
@@ -97,10 +97,10 @@
   <div class="search">
     <input id="searchInput" placeholder="Suchen nach Interpret, Album, Jahr oder Genre …">
     <select id="sortSelect" style="max-width:180px">
-      <option value="newest">Neueste zuerst</option>
-      <option value="artist">Interpret A–Z</option>
-      <option value="album">Album A–Z</option>
-      <option value="year">Jahr</option>
+      <option value="newest" id="sortNewest">Neueste zuerst</option>
+      <option value="artist" id="sortArtist">Interpret A–Z</option>
+      <option value="album" id="sortAlbum">Album A–Z</option>
+      <option value="year" id="sortYear">Jahr</option>
     </select>
   </div>
 
@@ -179,7 +179,7 @@ function render(){
   $('genreStat').textContent = new Set(records.map(r=>r.genre).filter(Boolean)).size;
 
   if(!list.length){
-    cards.innerHTML = `<div class="empty">Noch keine Platten gefunden.<br><br><button class="btn primary" onclick="openNew()">Erste Platte hinzufügen</button></div>`;
+    cards.innerHTML = `<div class="empty">${i18n[lang].empty}<br><br><button class="btn primary" onclick="openNew()">${i18n[lang].first}</button></div>`;
     return;
   }
 
@@ -192,7 +192,7 @@ function render(){
         <div>${escapeHtml(r.artist || '')}</div>
         <div class="small">${escapeHtml(r.year || '')}</div>
         ${r.genre ? `<span class="tag">${escapeHtml(r.genre)}</span>` : ''}
-        ${r.tracks?.length ? `<span class="tag">${r.tracks.length} Titel</span>` : ''}
+        ${r.tracks?.length ? `<span class="tag">${r.tracks.length} ${i18n[lang].titles}</span>` : ''}
       </div>
     </article>`;
   }).join('');
@@ -203,7 +203,7 @@ window.openNew = function(){
   $('recordForm').reset();
   $('photoPreview').style.display='none';
   $('deleteBtn').style.display='none';
-  $('dialogTitle').textContent='Platte hinzufügen';
+  $('dialogTitle').textContent=i18n[lang].dialogNew;
   dlg.showModal();
 }
 
@@ -219,7 +219,7 @@ window.openEdit = function(id){
   if(photoData){ $('photoPreview').src=photoData; $('photoPreview').style.display='block'; }
   else $('photoPreview').style.display='none';
   $('deleteBtn').style.display='inline-block';
-  $('dialogTitle').textContent='Platte bearbeiten';
+  $('dialogTitle').textContent=i18n[lang].dialogEdit;
   dlg.showModal();
 }
 
@@ -249,7 +249,7 @@ $('photoInput').addEventListener('change', e=>{
 
 $('deleteBtn').onclick=()=>{
   if(!editId) return;
-  if(confirm('Diese Platte wirklich löschen?')){
+  if(confirm(i18n[lang].confirmDelete)){
     records=records.filter(r=>r.id!==editId); saveLocal(); dlg.close();
   }
 };
@@ -273,13 +273,35 @@ $('importFile').onchange=e=>{
     try{
       const data=JSON.parse(reader.result);
       if(!Array.isArray(data)) throw new Error();
-      records=data; saveLocal(); alert('Sicherung geladen.');
-    }catch{ alert('Die Datei ist keine gültige MP-Vinyl-Sicherung.'); }
+      records=data; saveLocal(); alert(i18n[lang].loaded);
+    }catch{ alert(i18n[lang].invalid); }
   };
   reader.readAsText(f);
 };
 
-render();
+let lang = localStorage.getItem('mp-vinyl-lang') || 'de';
+const i18n = {
+  de:{brandSub:'Meine Plattensammlung',heroTitle:'Platte fotografieren. Rest eintragen. Fertig.',heroText:'Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.',add:'＋ Platte hinzufügen',import:'Sicherung laden',collection:'Sammlung',records:'Platten',artists:'Interpreten',genres:'Genres',search:'Suchen nach Interpret, Album, Jahr oder Genre …',newest:'Neueste zuerst',artistSort:'Interpret A–Z',albumSort:'Album A–Z',yearSort:'Jahr',bottom:'＋ Neue Platte',backup:'Sicherung',dialogNew:'Platte hinzufügen',dialogEdit:'Platte bearbeiten',camera:'Cover fotografieren oder auswählen',cameraHelp:'Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.',coverUrl:'Cover-URL aus dem Internet',artist:'Interpret',album:'Album',year:'Jahr',genre:'Musikrichtung',tracks:'Titelliste',save:'Speichern',delete:'Löschen',empty:'Noch keine Platten gefunden.',first:'Erste Platte hinzufügen',titles:'Titel',confirmDelete:'Diese Platte wirklich löschen?',loaded:'Sicherung geladen.',invalid:'Die Datei ist keine gültige MP-Vinyl-Sicherung.'},
+  no:{brandSub:'Min platesamling',heroTitle:'Ta bilde av platen. Fyll inn resten. Ferdig.',heroText:'Din private platesamling på mobil og PC. Med cover, artist, album, år, sjanger og låtliste.',add:'＋ Legg til plate',import:'Last inn sikkerhetskopi',collection:'Samling',records:'Plater',artists:'Artister',genres:'Sjangre',search:'Søk etter artist, album, år eller sjanger …',newest:'Nyeste først',artistSort:'Artist A–Å',albumSort:'Album A–Å',yearSort:'År',bottom:'＋ Ny plate',backup:'Sikkerhetskopi',dialogNew:'Legg til plate',dialogEdit:'Rediger plate',camera:'Ta bilde av cover eller velg bilde',cameraHelp:'På iPhone åpner «Velg bilde» kameraet eller bildebiblioteket.',coverUrl:'Cover-URL fra internett',artist:'Artist',album:'Album',year:'År',genre:'Sjanger',tracks:'Låtliste',save:'Lagre',delete:'Slett',empty:'Ingen plater funnet ennå.',first:'Legg til første plate',titles:'låter',confirmDelete:'Vil du virkelig slette denne platen?',loaded:'Sikkerhetskopien er lastet inn.',invalid:'Filen er ikke en gyldig MP-Vinyl-sikkerhetskopi.'}
+};
+function applyLang(){
+ const t=i18n[lang]; document.documentElement.lang=lang;
+ $('brandSub').textContent=t.brandSub; $('heroTitle').textContent=t.heroTitle; $('heroText').textContent=t.heroText;
+ $('addBtn').textContent=t.add; $('importBtn').textContent=t.import; $('collectionTitle').textContent=t.collection;
+ $('statRecordsLabel').textContent=t.records; $('statArtistsLabel').textContent=t.artists; $('statGenresLabel').textContent=t.genres;
+ $('searchInput').placeholder=t.search; $('sortNewest').textContent=t.newest; $('sortArtist').textContent=t.artistSort; $('sortAlbum').textContent=t.albumSort; $('sortYear').textContent=t.yearSort;
+ $('addBtnBottom').textContent=t.bottom; $('exportBtn').textContent=t.backup; $('langBtn').textContent=lang==='de'?'NO':'DE';
+ const labels=document.querySelectorAll('#recordDialog label');
+ if(labels[0]) labels[0].textContent=t.coverUrl; if(labels[1]) labels[1].textContent=t.artist; if(labels[2]) labels[2].textContent=t.album;
+ if(labels[3]) labels[3].textContent=t.year; if(labels[4]) labels[4].textContent=t.genre; if(labels[5]) labels[5].textContent=t.tracks;
+ document.querySelector('.cameraBox strong').textContent=t.camera; document.querySelector('.cameraBox p').textContent=t.cameraHelp;
+ $('saveBtn').textContent=t.save; $('deleteBtn').textContent=t.delete;
+ $('dialogTitle').textContent=editId?t.dialogEdit:t.dialogNew;
+ render();
+}
+$('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
+applyLang();
+
 </script>
 </body>
 </html>
