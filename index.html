@@ -1110,6 +1110,43 @@ function applyLang(){
    themeOptions[4].text=t.themeDark;
  }
 
+  // FORCE theme texts to follow selected language
+  const isNO = lang === 'no';
+  const setTxt = (id, de, no) => { const el=$(id); if(el) el.textContent = isNO ? no : de; };
+
+  setTxt('luxuryEyebrow','MP VINYL • HI-FI-SAMMLUNG','MP VINYL • HI-FI-SAMLING');
+  setTxt('retroSign','MP VINYL PLATTENLADEN','MP VINYL PLATEBUTIKK');
+  setTxt('retroTitle','Meine Plattensammlung','Platesamlingen min');
+  setTxt('retroText','Stöbern, hinzufügen, wiederfinden.','Bla gjennom, legg til og finn igjen platene dine.');
+  setTxt('retroAdd','＋ Neue Platte','＋ Ny plate');
+  setTxt('retroImport','Sicherung laden','Importer backup');
+
+  setTxt('neonEyebrow','RECORD BAR','PLATEBAR');
+  setTxt('neonTitle','Deine Sammlung im Neonlicht','Samlingen din i neonlys');
+  setTxt('neonText','Cover, Künstler, Jahr und Genre – alles auf einen Blick.','Cover, artist, år og sjanger – alt på ett sted.');
+  setTxt('neonAdd','＋ Platte hinzufügen','＋ Legg til plate');
+  setTxt('neonImport','Sicherung laden','Importer backup');
+
+  setTxt('popTitle','MP VINYL!','MP VINYL!');
+  setTxt('popText','DEINE PLATTEN. DEIN SOUND.','PLATENE DINE. LYDEN DIN.');
+  setTxt('popAdd','＋ NEUE PLATTE!','＋ NY PLATE!');
+  setTxt('popImport','SICHERUNG!','BACKUP!');
+
+  setTxt('darkTitle','Deine Sammlung.','Samlingen din.');
+  setTxt('darkText','Ruhig. Schnell. Übersichtlich.','Enkelt. Raskt. Oversiktlig.');
+  setTxt('darkAdd','＋ Platte','＋ Plate');
+  setTxt('darkImport','Sicherung','Backup');
+
+  const opts=$('themeSelect')?.options;
+  if(opts && opts.length>=5){
+    opts[0].text = isNO ? 'Luksus Hi-Fi' : 'Luxus Hi-Fi';
+    opts[1].text = 'Retro';
+    opts[2].text = 'Neon';
+    opts[3].text = 'Pop-Art';
+    opts[4].text = isNO ? 'Mørk' : 'Dark';
+  }
+
+
  render();
 }
 $('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
