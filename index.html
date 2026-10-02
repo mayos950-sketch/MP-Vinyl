@@ -1541,6 +1541,117 @@ body {
     font-size:1.2rem;
   }
 }
+
+/* ===== FULL APP VIEWS ===== */
+.app-view{
+  min-height:calc(100vh - 78px);
+  padding:calc(22px + env(safe-area-inset-top)) 18px 110px;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(185,125,61,.10),transparent 24%),
+    linear-gradient(180deg,#100d0a,#080706);
+  color:#f7f1e8;
+}
+.view-head{
+  max-width:900px;
+  margin:0 auto 24px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.view-head h2{margin:0;font-size:2rem}
+.view-head p{margin:4px 0 0;color:#b9ada0}
+.back-home{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(222,180,111,.25);
+  background:rgba(255,255,255,.04);
+  color:#e2bd7c;font-size:2rem;line-height:1;
+}
+.search-panel{
+  max-width:900px;margin:0 auto 18px;
+}
+.search-panel input{
+  width:100%;
+  border:1px solid rgba(222,180,111,.20);
+  background:#17120e;
+  color:#fff;
+  border-radius:18px;
+  padding:16px 18px;
+  font-size:1rem;
+}
+.view-grid{
+  max-width:900px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.search-card{
+  display:flex;gap:12px;align-items:center;
+  background:#15110e;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;padding:12px;
+}
+.search-card img,.search-card .mini-cover{
+  width:76px;height:76px;object-fit:cover;border-radius:10px;
+  flex:0 0 auto;
+  background:radial-gradient(circle,#c99c55 0 10%,#0a0a0a 11% 100%);
+}
+.search-card strong{display:block}
+.search-card small{color:#a99c90}
+.no-results{
+  grid-column:1/-1;text-align:center;color:#a99c90;padding:36px 10px
+}
+.stats-dashboard{
+  max-width:900px;margin:0 auto 18px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+}
+.stats-dashboard article{
+  background:linear-gradient(180deg,#17120e,#100d0a);
+  border:1px solid rgba(222,180,111,.15);
+  border-radius:18px;padding:18px;text-align:center;
+}
+.stats-dashboard b{
+  display:block;font-size:2rem;color:#e1b96f;margin-bottom:4px
+}
+.stats-dashboard span{color:#b9ada0;font-size:.85rem}
+.stats-box{
+  max-width:900px;margin:0 auto 14px;
+  background:#15110e;border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;padding:18px;
+}
+.stats-box h3{margin:0 0 12px}
+.feature-stat{font-size:1.35rem;color:#e7c787;font-weight:800}
+.bar-list{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:54px 1fr 28px;gap:10px;align-items:center}
+.bar-track{height:9px;background:#28211b;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#c99343,#e4c17f);border-radius:999px}
+.profile-card{
+  max-width:900px;margin:0 auto 18px;
+  display:flex;align-items:center;gap:14px;
+  background:#15110e;border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;padding:18px;
+}
+.profile-avatar{
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(180deg,#e3bd73,#b87c34);color:#15100a;font-weight:900
+}
+.profile-actions{
+  max-width:900px;margin:0 auto;display:grid;gap:10px
+}
+.profile-actions button{
+  width:100%;text-align:left;padding:16px 18px;border-radius:16px;
+  background:#17120e;border:1px solid rgba(222,180,111,.13);
+  color:#f7f1e8;font:inherit;font-weight:700
+}
+.profile-note{
+  max-width:900px;margin:16px auto;color:#9f9387;font-size:.9rem
+}
+@media(max-width:700px){
+  .app-view{padding-left:14px;padding-right:14px}
+  .view-grid{grid-template-columns:1fr}
+  .stats-dashboard{grid-template-columns:repeat(2,1fr)}
+  .view-head h2{font-size:1.7rem}
+}
+
 </style>
 
   <link rel="manifest" href="manifest.webmanifest">
@@ -1847,6 +1958,147 @@ document.querySelectorAll('.bottom-nav .nav-item').forEach(btn=>{
 document.getElementById('homeSettingsBtn')?.addEventListener('click', ()=>{
   document.getElementById('settingsBtn')?.click();
 });
+
+
+// ===== Separate app views: search, stats, profile =====
+function getAllRecordsForViews(){
+  try{
+    if(Array.isArray(records)) return records;
+  }catch(e){}
+  try{
+    return JSON.parse(localStorage.getItem('mp-vinyl-records-v1')||'[]');
+  }catch(e){ return []; }
+}
+
+function showAppView(name){
+  const home=document.getElementById('premiumHome');
+  const targets={
+    search:document.getElementById('viewSearch'),
+    stats:document.getElementById('viewStats'),
+    profile:document.getElementById('viewProfile')
+  };
+  Object.values(targets).forEach(v=>{ if(v) v.hidden=true; });
+  if(home) home.hidden = name!=='home';
+  if(name==='home'){
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  const target=targets[name];
+  if(target){
+    target.hidden=false;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  if(name==='search') renderSearchView('');
+  if(name==='stats') renderStatsView();
+  if(name==='profile') updateProfileView();
+}
+
+function renderSearchView(q=''){
+  const box=document.getElementById('searchResults');
+  if(!box) return;
+  const query=(q||'').trim().toLowerCase();
+  const all=getAllRecordsForViews();
+  const filtered=!query ? all : all.filter(r=>
+    [r.artist,r.album,r.year,r.genre,(r.tracks||'')].some(v=>
+      String(v||'').toLowerCase().includes(query)
+    )
+  );
+  if(!filtered.length){
+    box.innerHTML='<div class="no-results">'+(query?'Keine Treffer':'Noch keine Platten in deiner Sammlung')+'</div>';
+    return;
+  }
+  box.innerHTML=filtered.map(r=>{
+    const cover=r.photoData||r.coverUrl||'';
+    return `<article class="search-card">
+      ${cover?`<img src="${cover}" alt="">`:`<div class="mini-cover"></div>`}
+      <div><strong>${escapeHtml?escapeHtml(r.artist||'Unbekannt'):r.artist||'Unbekannt'}</strong>
+      <div>${escapeHtml?escapeHtml(r.album||'Ohne Titel'):r.album||'Ohne Titel'}</div>
+      <small>${[r.year,r.genre].filter(Boolean).join(' · ')}</small></div>
+    </article>`;
+  }).join('');
+}
+
+function renderStatsView(){
+  const all=getAllRecordsForViews();
+  const artists={}; const genres={}; const decades={}; const years=new Set();
+  all.forEach(r=>{
+    const a=(r.artist||'').trim(); if(a) artists[a]=(artists[a]||0)+1;
+    const g=(r.genre||'').trim(); if(g) genres[g]=(genres[g]||0)+1;
+    const y=parseInt(r.year,10);
+    if(y){ years.add(y); const d=Math.floor(y/10)*10; decades[d]=(decades[d]||0)+1; }
+  });
+  const top=(obj)=>Object.entries(obj).sort((a,b)=>b[1]-a[1])[0];
+  const topA=top(artists), topG=top(genres);
+  document.getElementById('statRecords').textContent=all.length;
+  document.getElementById('statArtists').textContent=Object.keys(artists).length;
+  document.getElementById('statGenres').textContent=Object.keys(genres).length;
+  document.getElementById('statYears').textContent=years.size;
+  document.getElementById('topArtistValue').textContent=topA?`${topA[0]} · ${topA[1]}`:'–';
+  document.getElementById('topGenreValue').textContent=topG?`${topG[0]} · ${topG[1]}`:'–';
+  const bars=document.getElementById('decadeBars');
+  const entries=Object.entries(decades).sort((a,b)=>Number(a[0])-Number(b[0]));
+  const max=Math.max(1,...entries.map(x=>x[1]));
+  bars.innerHTML=entries.length?entries.map(([d,n])=>`
+    <div class="bar-row"><span>${d}s</span>
+    <div class="bar-track"><div class="bar-fill" style="width:${Math.round(n/max*100)}%"></div></div>
+    <b>${n}</b></div>`).join(''):'<div class="small">Noch keine Jahresangaben vorhanden.</div>';
+}
+
+function updateProfileView(){
+  const s=document.getElementById('profileStatus');
+  try{
+    if(s) s.textContent=currentUser?.email || 'Nicht angemeldet';
+  }catch(e){
+    if(s) s.textContent='Nicht angemeldet';
+  }
+}
+
+document.getElementById('searchViewInput')?.addEventListener('input',e=>renderSearchView(e.target.value));
+document.querySelectorAll('[data-home]').forEach(b=>b.addEventListener('click',()=>showAppView('home')));
+
+document.getElementById('profileAccountBtn')?.addEventListener('click',()=>document.getElementById('accountBtn')?.click());
+document.getElementById('profileLangBtn')?.addEventListener('click',()=>document.getElementById('langBtn')?.click());
+document.getElementById('profileExportBtn')?.addEventListener('click',()=>document.getElementById('exportBtn')?.click());
+document.getElementById('profileImportBtn')?.addEventListener('click',()=>document.getElementById('settingsImportBtn')?.click());
+document.getElementById('profileSettingsBtn')?.addEventListener('click',()=>document.getElementById('settingsBtn')?.click());
+
+// Replace old bottom-nav scroll behavior with real app views
+document.querySelectorAll('.bottom-nav .nav-item').forEach(btn=>{
+  btn.onclick=(ev)=>{
+    ev.preventDefault();
+    const nav=btn.dataset.nav;
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(x=>x.classList.remove('active'));
+    if(nav!=='add') btn.classList.add('active');
+    if(nav==='home') showAppView('home');
+    if(nav==='search') showAppView('search');
+    if(nav==='stats') showAppView('stats');
+    if(nav==='profile') showAppView('profile');
+    if(nav==='add') (document.getElementById('addBtn')||document.getElementById('mainAddBtn')||document.getElementById('vinylAddBtn'))?.click();
+  };
+});
+
+
+function updateExtraViewLanguage(){
+  let current='de';
+  try{ current=lang||localStorage.getItem('mp-vinyl-lang')||'de'; }catch(e){}
+  const no=current==='no';
+  const set=(id,de,nn)=>{const e=document.getElementById(id); if(e)e.textContent=no?nn:de;};
+  set('searchTitle','Suche','Søk');
+  set('searchSub','Finde Platten nach Interpret, Album, Jahr oder Genre.','Finn plater etter artist, album, år eller sjanger.');
+  set('statsTitle','Statistik','Statistikk');
+  set('statsSub','Deine Sammlung auf einen Blick.','Samlingen din på et øyeblikk.');
+  set('statRecordsLabel','Platten','Plater');
+  set('statArtistsLabel','Interpreten','Artister');
+  set('statGenresLabel','Genres','Sjangre');
+  set('statYearsLabel','Jahrgänge','Årstall');
+  set('topArtistTitle','Meistgesammelter Interpret','Mest samlet artist');
+  set('topGenreTitle','Häufigstes Genre','Vanligste sjanger');
+  set('decadesTitle','Nach Jahrzehnten','Etter tiår');
+  set('profileTitle','Profil','Profil');
+  set('profileSub','Konto, Synchronisierung und Einstellungen.','Konto, synkronisering og innstillinger.');
+  set('profileNote','Wenn du angemeldet bist, wird deine Sammlung automatisch synchronisiert. Das Backup ist nur eine zusätzliche Sicherheitskopie.','Når du er innlogget, synkroniseres samlingen automatisk. Sikkerhetskopien er bare en ekstra trygghet.');
+}
+updateExtraViewLanguage();
 
 </script>
 <script>
@@ -2345,6 +2597,74 @@ document.getElementById('homeSettingsBtn')?.addEventListener('click', ()=>{
 });
 
 </script>
+
+
+<section class="app-view" id="viewSearch" hidden>
+  <div class="view-head">
+    <button class="back-home" type="button" data-home>‹</button>
+    <div>
+      <h2 id="searchTitle">Suche</h2>
+      <p id="searchSub">Finde Platten nach Interpret, Album, Jahr oder Genre.</p>
+    </div>
+  </div>
+  <div class="search-panel">
+    <input id="searchViewInput" type="search" placeholder="Interpret, Album, Jahr oder Genre">
+  </div>
+  <div class="view-grid" id="searchResults"></div>
+</section>
+
+<section class="app-view" id="viewStats" hidden>
+  <div class="view-head">
+    <button class="back-home" type="button" data-home>‹</button>
+    <div>
+      <h2 id="statsTitle">Statistik</h2>
+      <p id="statsSub">Deine Sammlung auf einen Blick.</p>
+    </div>
+  </div>
+  <div class="stats-dashboard">
+    <article><b id="statRecords">0</b><span id="statRecordsLabel">Platten</span></article>
+    <article><b id="statArtists">0</b><span id="statArtistsLabel">Interpreten</span></article>
+    <article><b id="statGenres">0</b><span id="statGenresLabel">Genres</span></article>
+    <article><b id="statYears">0</b><span id="statYearsLabel">Jahrgänge</span></article>
+  </div>
+  <div class="stats-box">
+    <h3 id="topArtistTitle">Meistgesammelter Interpret</h3>
+    <div class="feature-stat" id="topArtistValue">–</div>
+  </div>
+  <div class="stats-box">
+    <h3 id="topGenreTitle">Häufigstes Genre</h3>
+    <div class="feature-stat" id="topGenreValue">–</div>
+  </div>
+  <div class="stats-box">
+    <h3 id="decadesTitle">Nach Jahrzehnten</h3>
+    <div id="decadeBars" class="bar-list"></div>
+  </div>
+</section>
+
+<section class="app-view" id="viewProfile" hidden>
+  <div class="view-head">
+    <button class="back-home" type="button" data-home>‹</button>
+    <div>
+      <h2 id="profileTitle">Profil</h2>
+      <p id="profileSub">Konto, Synchronisierung und Einstellungen.</p>
+    </div>
+  </div>
+  <div class="profile-card">
+    <div class="profile-avatar">MP</div>
+    <div>
+      <strong>MP Vinyl</strong>
+      <div class="small" id="profileStatus">Nicht angemeldet</div>
+    </div>
+  </div>
+  <div class="profile-actions">
+    <button type="button" id="profileAccountBtn">Konto & Synchronisierung</button>
+    <button type="button" id="profileLangBtn">Sprache wechseln</button>
+    <button type="button" id="profileExportBtn">Sicherheitskopie speichern</button>
+    <button type="button" id="profileImportBtn">Sicherheitskopie laden</button>
+    <button type="button" id="profileSettingsBtn">Weitere Einstellungen</button>
+  </div>
+  <p class="profile-note" id="profileNote">Wenn du angemeldet bist, wird deine Sammlung automatisch synchronisiert. Das Backup ist nur eine zusätzliche Sicherheitskopie.</p>
+</section>
 
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-item active" data-nav="home" type="button">
