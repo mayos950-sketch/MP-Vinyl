@@ -790,6 +790,13 @@ body.theme-dark .tag{display:none}
   body.theme-dark .cards{grid-template-columns:repeat(2,1fr)}
 }
 
+
+/* Custom localized file picker */
+.file-picker-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.file-picker-btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;background:var(--accent);color:#111}
+.file-picker-name{font-size:.9rem;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#photoInput{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+
 </style>
 </head>
 <body>
@@ -907,6 +914,10 @@ body.theme-dark .tag{display:none}
       <strong>Cover fotografieren oder auswählen</strong>
       <p class="small">Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.</p>
       <input type="file" id="photoInput" accept="image/*" capture="environment">
+<div class="file-picker-row">
+  <button type="button" class="file-picker-btn" id="photoChooseBtn">Velg bilde</button>
+  <span class="file-picker-name" id="photoFileName">Ingen fil valgt</span>
+</div>
       <img id="photoPreview" alt="Cover Vorschau">
     </div>
 
@@ -914,8 +925,8 @@ body.theme-dark .tag{display:none}
     <input id="coverUrl" placeholder="https://…">
 
     <div class="grid2">
-      <div><label>Interpret</label><input id="artist" required placeholder="z. B. Pink Floyd"></div>
-      <div><label>Album</label><input id="album" required placeholder="z. B. The Dark Side of the Moon"></div>
+      <div><label>Interpret</label><input id="artist" required placeholder="f.eks. Pink Floyd" id="artistInput"></div>
+      <div><label>Album</label><input id="album" required placeholder="f.eks. The Dark Side of the Moon" id="albumInput"></div>
     </div>
     <div class="grid2">
       <div><label>Jahr</label><input id="year" inputmode="numeric" placeholder="1973"></div>
@@ -1147,7 +1158,22 @@ function applyLang(){
   }
 
 
- render();
+ 
+  // Localized custom photo picker
+  const chooseBtn = $('photoChooseBtn');
+  const fileName = $('photoFileName');
+  if(chooseBtn){
+    chooseBtn.textContent = isNO ? 'Velg bilde' : 'Bild auswählen';
+  }
+  if(fileName && !fileName.dataset.chosen){
+    fileName.textContent = isNO ? 'Ingen fil valgt' : 'Keine Datei ausgewählt';
+  }
+  const artistEl = $('artistInput');
+  const albumEl = $('albumInput');
+  if(artistEl) artistEl.placeholder = isNO ? 'f.eks. Pink Floyd' : 'z. B. Pink Floyd';
+  if(albumEl) albumEl.placeholder = isNO ? 'f.eks. The Dark Side of the Moon' : 'z. B. The Dark Side of the Moon';
+
+  render();
 }
 $('langBtn').onclick=()=>{lang=lang==='de'?'no':'de';localStorage.setItem('mp-vinyl-lang',lang);applyLang();};
 applyLang();
@@ -1175,6 +1201,20 @@ applyTheme();
 
 document.querySelectorAll('[data-action="add"]').forEach(b=>b.addEventListener('click',openNew));
 document.querySelectorAll('[data-action="import"]').forEach(b=>b.addEventListener('click',()=>document.getElementById('importFile').click()));
+
+
+const photoChooseBtn = document.getElementById('photoChooseBtn');
+const photoInputEl = document.getElementById('photoInput');
+const photoFileNameEl = document.getElementById('photoFileName');
+if(photoChooseBtn && photoInputEl){
+  photoChooseBtn.addEventListener('click',()=>photoInputEl.click());
+  photoInputEl.addEventListener('change',()=>{
+    if(photoInputEl.files && photoInputEl.files[0] && photoFileNameEl){
+      photoFileNameEl.textContent = photoInputEl.files[0].name;
+      photoFileNameEl.dataset.chosen='1';
+    }
+  });
+}
 
 </script>
 </body>
