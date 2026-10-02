@@ -801,14 +801,34 @@ body.theme-dark .tag{display:none}
 #accountBtn{white-space:nowrap}
 body.theme-neon #accountBtn{box-shadow:0 0 18px rgba(40,231,255,.12)}
 
+
+/* Mobile header fix: keep account/login visible */
+.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:700px){
+  header{padding:10px 12px}
+  .top{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch}
+  .brand{width:100%}
+  .header-actions{width:100%;display:grid;grid-template-columns:1fr auto auto;gap:8px}
+  .header-actions .theme-select{max-width:none;width:100%}
+  #langBtn{min-width:52px}
+  #accountBtn{grid-column:1/3;width:100%;font-size:1rem;padding:12px 14px}
+  #exportBtn{grid-column:3/4;width:100%}
+}
+@media(max-width:420px){
+  .header-actions{grid-template-columns:1fr auto}
+  #themeSelect{grid-column:1/2}
+  #langBtn{grid-column:2/3}
+  #accountBtn{grid-column:1/2}
+  #exportBtn{grid-column:2/3}
+}
+
 </style>
 </head>
 <body>
 <header>
   <div class="top">
     <div class="brand"><div class="logo"></div><div><span style="font-size:1.24rem;letter-spacing:.02em">MP Vinyl</span><br><span class="small" id="brandSub">Meine Plattensammlung</span></div></div>
-    <div class="actions"><select id="themeSelect" class="theme-select" aria-label="Design"><option value="luxury">Luxus Hi‑Fi</option><option value="retro">Retro</option><option value="neon">Neon</option><option value="pop">Pop‑Art</option><option value="dark">Dark</option></select><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
-    <button class="btn secondary" id="accountBtn" type="button">Konto</button>
+    <div class="actions header-actions"><select id="themeSelect" class="theme-select" aria-label="Design"><option value="luxury">Luxus Hi‑Fi</option><option value="retro">Retro</option><option value="neon">Neon</option><option value="pop">Pop‑Art</option><option value="dark">Dark</option></select><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="accountBtn" type="button">Konto</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
 </div>
 </header>
 
