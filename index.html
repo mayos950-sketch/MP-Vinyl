@@ -91,13 +91,112 @@
       .hero{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}
     }
     @media(max-width:480px){.cards{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+  
+    .theme-select{
+      background:#15181d;color:#fff;border:1px solid #3b424d;border-radius:14px;
+      padding:11px 34px 11px 12px;font-weight:800;max-width:150px
+    }
+
+    /* LUXUS HI-FI */
+    body.theme-luxury{
+      background:
+        radial-gradient(circle at 18% 0%,rgba(214,162,72,.12),transparent 25%),
+        linear-gradient(180deg,#090807,#15100b 58%,#080706);
+      --card:#17120d;--card2:#231a11;--text:#f7ead5;--muted:#c7b89e;
+      --accent:#c8943e;--accent2:#f0c66e;--line:#4b3924;
+    }
+    body.theme-luxury .panel,
+    body.theme-luxury .record{
+      background:linear-gradient(180deg,rgba(31,22,14,.96),rgba(15,11,8,.98));
+      border-color:rgba(224,177,91,.24)
+    }
+    body.theme-luxury header{background:rgba(10,8,6,.88);border-bottom-color:rgba(224,177,91,.24)}
+    body.theme-luxury .cover{
+      background:
+        linear-gradient(135deg,rgba(83,47,24,.28),rgba(0,0,0,.12)),
+        radial-gradient(circle,#2b231b 0 6%,#0d0d0d 7% 46%,#24201c 47% 49%,#0c0c0c 50%)
+    }
+
+    /* RETRO RECORD SHOP */
+    body.theme-retro{
+      background:#d8b77d;
+      --card:#f2d7a2;--card2:#e7c589;--text:#3d2415;--muted:#6e4a31;
+      --accent:#c65c2f;--accent2:#f28c49;--line:#8f623f;
+    }
+    body.theme-retro header{background:rgba(239,205,150,.95);border-bottom-color:#a87047}
+    body.theme-retro .panel,
+    body.theme-retro .record{
+      background:linear-gradient(180deg,#f2d6a3,#e4bf7c);
+      border-color:#9d6942;box-shadow:0 12px 28px rgba(76,42,16,.18)
+    }
+    body.theme-retro .btn.secondary,
+    body.theme-retro .theme-select{background:#7b4a2e;color:#fff;border-color:#60351f}
+    body.theme-retro input,body.theme-retro select,body.theme-retro textarea{background:#f6e2bb;color:#3d2415;border-color:#a97a55}
+    body.theme-retro .tag{background:#f0c88e;color:#542c19;border-color:#a76c3d}
+
+    /* NEON RECORD BAR */
+    body.theme-neon{
+      background:
+        radial-gradient(circle at 20% 10%,rgba(255,0,153,.18),transparent 25%),
+        radial-gradient(circle at 80% 8%,rgba(0,229,255,.16),transparent 28%),
+        #070712;
+      --card:#0c0d18;--card2:#111326;--text:#fff;--muted:#aeb5d4;
+      --accent:#ff2da6;--accent2:#28e7ff;--line:#30355f;
+    }
+    body.theme-neon header{background:rgba(5,5,15,.88);border-bottom-color:rgba(40,231,255,.25)}
+    body.theme-neon .panel,
+    body.theme-neon .record{
+      background:linear-gradient(180deg,rgba(11,12,29,.97),rgba(7,8,20,.98));
+      border-color:rgba(255,45,166,.38);
+      box-shadow:0 0 22px rgba(255,45,166,.12),0 0 34px rgba(40,231,255,.06)
+    }
+    body.theme-neon .btn.primary{
+      background:linear-gradient(90deg,#28e7ff,#ff2da6);color:#070712;
+      box-shadow:0 0 20px rgba(255,45,166,.25)
+    }
+    body.theme-neon .cover{box-shadow:inset 0 0 35px rgba(40,231,255,.08)}
+    body.theme-neon .theme-select{background:#0f1020;border-color:#3e4375}
+
+    /* POP ART */
+    body.theme-pop{
+      background:
+        radial-gradient(circle at 10% 10%,#ffe94d 0 7%,transparent 7.5%),
+        radial-gradient(circle at 90% 20%,#ff4d4d 0 7%,transparent 7.5%),
+        #1eb9ff;
+      background-size:130px 130px,170px 170px,auto;
+      --card:#fff7d1;--card2:#ffe552;--text:#111;--muted:#333;
+      --accent:#ff3b30;--accent2:#ffe600;--line:#111;
+    }
+    body.theme-pop header{background:#ffe34d;border-bottom:3px solid #111}
+    body.theme-pop .panel,
+    body.theme-pop .record{
+      background:#fff5c4;border:3px solid #111;box-shadow:7px 7px 0 #111;border-radius:12px
+    }
+    body.theme-pop .btn{border:2px solid #111;box-shadow:3px 3px 0 #111}
+    body.theme-pop .btn.primary{background:#ff3b30;color:#fff}
+    body.theme-pop .btn.secondary,body.theme-pop .theme-select{background:#1eb9ff;color:#111;border:2px solid #111}
+    body.theme-pop input,body.theme-pop select,body.theme-pop textarea{background:#fff;color:#111;border:2px solid #111}
+    body.theme-pop .tag{background:#ffe600;color:#111;border:2px solid #111}
+
+    /* DARK */
+    body.theme-dark{
+      background:#090b0e;
+      --card:#14171c;--card2:#1b2027;--text:#f2f4f7;--muted:#9ba3ad;
+      --accent:#8da0b6;--accent2:#c5d1df;--line:#2f3740;
+    }
+    body.theme-dark header{background:rgba(8,10,13,.92)}
+    body.theme-dark .panel,
+    body.theme-dark .record{
+      background:linear-gradient(180deg,#171b20,#0f1216);border-color:#2a3138
+    }
+
   </style>
 </head>
 <body>
 <header>
   <div class="top">
     <div class="brand"><div class="logo"></div><div><span style="font-size:1.24rem;letter-spacing:.02em">MP Vinyl</span><br><span class="small" id="brandSub">Meine Plattensammlung</span></div></div>
-    <div class="actions"><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
+    <div class="actions"><select id="themeSelect" class="theme-select" aria-label="Design"><option value="luxury">Luxus Hi‑Fi</option><option value="retro">Retro</option><option value="neon">Neon</option><option value="pop">Pop‑Art</option><option value="dark">Dark</option></select><button class="btn secondary" id="langBtn">NO</button><button class="btn secondary" id="exportBtn">Sicherung</button></div>
   </div>
 </header>
 
