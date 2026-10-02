@@ -515,6 +515,281 @@ body.theme-dark .record{border:0;box-shadow:none;border-radius:8px}
   body.theme-retro .cards,body.theme-luxury .cards,body.theme-neon .cards,body.theme-dark .cards{grid-template-columns:repeat(2,1fr)}
 }
 
+
+/* ===== V2 — MUCH MORE DISTINCT THEMES ===== */
+
+/* universal */
+.theme-layout{animation:themeIn .38s ease both}
+@keyframes themeIn{from{opacity:.25;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}
+.record{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.record:active{transform:scale(.985)}
+.cover img{transition:transform .22s ease}
+.record:hover .cover img{transform:scale(1.025)}
+
+/* LUXURY: full hi-fi rack */
+body.theme-luxury .wrap{max-width:1180px}
+body.theme-luxury .luxury-console{
+  min-height:470px;
+  border-radius:24px;
+  padding:34px;
+  grid-template-columns:.9fr 1.1fr;
+  background:
+    linear-gradient(90deg,rgba(27,17,10,.98),rgba(9,8,7,.99)),
+    repeating-linear-gradient(0deg,rgba(117,69,34,.18) 0 2px,transparent 2px 9px);
+  box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.035)
+}
+body.theme-luxury .luxury-console:before{
+  content:"";
+  position:absolute;left:0;right:0;bottom:0;height:84px;
+  background:linear-gradient(180deg,#15110d,#0b0907);
+  border-top:1px solid rgba(225,179,91,.25)
+}
+body.theme-luxury .luxury-copy{
+  align-self:start;
+  padding-top:28px
+}
+body.theme-luxury .luxury-copy h1{
+  font-family:Georgia,serif;
+  font-size:clamp(2.2rem,5vw,4rem);
+  line-height:.98;
+  max-width:520px
+}
+body.theme-luxury .luxury-copy p{max-width:470px;font-size:1.05rem}
+body.theme-luxury .turntable-unit{
+  min-height:330px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#35261a,#120f0c);
+  box-shadow:inset 0 0 0 1px #644a2e,0 25px 50px rgba(0,0,0,.48)
+}
+body.theme-luxury .turntable-unit:before{
+  content:"MP AUDIO • DIRECT DRIVE";
+  position:absolute;left:24px;top:18px;
+  font-size:.7rem;letter-spacing:.18em;color:#d7ba82;font-weight:900
+}
+body.theme-luxury .platter{
+  width:250px;height:250px;left:34px;top:48px
+}
+body.theme-luxury .tonearm{height:225px;right:48px;top:56px}
+body.theme-luxury .vu{bottom:28px}
+body.theme-luxury .collection-strip{
+  border-radius:16px;
+  background:linear-gradient(180deg,#1a140f,#100c09);
+  border-color:#5a4227
+}
+body.theme-luxury .cards{grid-template-columns:repeat(3,1fr);gap:22px}
+body.theme-luxury .record{
+  background:#100d0a;
+  border:1px solid rgba(218,170,82,.25);
+  box-shadow:0 16px 36px rgba(0,0,0,.28)
+}
+body.theme-luxury .record .recbody{background:linear-gradient(#18110b,#0f0c09)}
+
+/* RETRO: 70s record shop with poster blocks */
+body.theme-retro{
+  background:
+    linear-gradient(rgba(241,211,163,.94),rgba(241,211,163,.94)),
+    repeating-linear-gradient(90deg,#8e5c32 0 3px,#71451f 3px 7px)
+}
+body.theme-retro header{
+  border-bottom:5px solid #6f421f;
+  box-shadow:0 5px 0 #b1713f
+}
+body.theme-retro .retro-shop{
+  min-height:440px;
+  border:7px solid #6f421f;
+  box-shadow:14px 14px 0 #9d6337;
+  background:
+    linear-gradient(rgba(247,223,180,.91),rgba(247,223,180,.91)),
+    repeating-linear-gradient(0deg,rgba(111,66,31,.16) 0 2px,transparent 2px 8px)
+}
+body.theme-retro .retro-sign{
+  top:20px;left:28px;
+  font-size:1.2rem;
+  color:#943719;
+  background:#f4c976;
+  padding:8px 12px;
+  border:3px solid #6f421f;
+  box-shadow:4px 4px 0 #6f421f
+}
+body.theme-retro .retro-copy h1{
+  font-size:clamp(2.6rem,6vw,4.8rem);
+  line-height:.9;
+  text-transform:uppercase;
+  letter-spacing:-.04em
+}
+body.theme-retro .retro-disc{width:240px;height:240px}
+body.theme-retro .retro-shelf{
+  height:78px;border-bottom-width:10px;
+  gap:5px
+}
+body.theme-retro .retro-shelf span{width:38px}
+body.theme-retro .cards{
+  grid-template-columns:repeat(4,1fr);
+  background:#b87843;
+  border:7px solid #6f421f;
+  padding:20px;
+  box-shadow:inset 0 -16px 0 rgba(82,46,20,.18)
+}
+body.theme-retro .record{
+  background:#f5e0b8;
+  border:3px solid #603717;
+  box-shadow:5px 5px 0 #73431f;
+  transform:rotate(-.6deg)
+}
+body.theme-retro .record:nth-child(even){transform:rotate(.6deg)}
+body.theme-retro .recbody{background:#f5e0b8}
+
+/* NEON: nightclub dashboard */
+body.theme-neon{
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,0,153,.17),transparent 28%),
+    radial-gradient(circle at 80% 0%,rgba(0,225,255,.16),transparent 30%),
+    #04040d
+}
+body.theme-neon header{
+  border-bottom:1px solid rgba(40,231,255,.5);
+  box-shadow:0 0 28px rgba(40,231,255,.16)
+}
+body.theme-neon .neon-stage{
+  min-height:470px;
+  border-radius:28px;
+  border:2px solid #22dfff;
+  background:
+    linear-gradient(180deg,rgba(5,6,20,.9),rgba(2,2,10,.99)),
+    repeating-linear-gradient(90deg,transparent 0 44px,rgba(35,225,255,.04) 45px 46px);
+  box-shadow:0 0 35px rgba(40,231,255,.2),0 0 60px rgba(255,45,166,.09),inset 0 0 70px rgba(255,45,166,.06)
+}
+body.theme-neon .neon-sign{
+  font-size:3.7rem;top:28px;right:36px
+}
+body.theme-neon .neon-copy h1{
+  font-size:clamp(2.3rem,5vw,4rem);
+  max-width:520px
+}
+body.theme-neon .neon-record{
+  width:250px;height:250px;
+  box-shadow:0 0 30px rgba(255,45,166,.45),0 0 60px rgba(40,231,255,.22)
+}
+body.theme-neon .cards{
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  padding:18px;
+  border:1px solid rgba(40,231,255,.25);
+  box-shadow:inset 0 0 35px rgba(40,231,255,.04)
+}
+body.theme-neon .record{
+  border:1px solid rgba(40,231,255,.35);
+  box-shadow:0 0 20px rgba(40,231,255,.08),0 0 24px rgba(255,45,166,.06)
+}
+body.theme-neon .record:hover{
+  transform:translateY(-4px);
+  box-shadow:0 0 28px rgba(40,231,255,.18),0 0 36px rgba(255,45,166,.12)
+}
+
+/* POP: editorial comic page */
+body.theme-pop{
+  background:
+    radial-gradient(circle,#111 0 1px,transparent 1.5px) 0 0/12px 12px,
+    #20b8ff
+}
+body.theme-pop header{
+  background:#ffe44f;
+  border-bottom:5px solid #111;
+  box-shadow:0 5px 0 #ff3b30
+}
+body.theme-pop .pop-board{
+  min-height:460px;
+  padding:40px;
+  border:6px solid #111;
+  box-shadow:14px 14px 0 #111;
+  background:
+    radial-gradient(circle,#111 0 1px,transparent 1.4px) 0 0/11px 11px,
+    #ffe84e
+}
+body.theme-pop .burst{
+  font-size:1.5rem;
+  padding:10px 16px
+}
+body.theme-pop .pop-title{
+  font-size:clamp(4rem,10vw,7.2rem);
+  line-height:.82;
+  max-width:700px
+}
+body.theme-pop .pop-sub{
+  font-size:1.35rem;
+  max-width:520px
+}
+body.theme-pop .pop-record{
+  width:220px;height:220px;right:54px;bottom:36px
+}
+body.theme-pop .cards{
+  grid-template-columns:repeat(2,1fr);
+  gap:28px
+}
+body.theme-pop .record{
+  border:5px solid #111;
+  box-shadow:10px 10px 0 #111;
+  background:#fff8cf
+}
+body.theme-pop .recbody{background:#fff8cf}
+
+/* DARK: cover-first gallery */
+body.theme-dark{
+  background:#07090c
+}
+body.theme-dark header{
+  background:#07090c;
+  border-bottom:1px solid #1b222a
+}
+body.theme-dark .dark-gallery{
+  min-height:250px;
+  background:linear-gradient(180deg,#0d1014,#090b0e);
+  border:1px solid #1d242c;
+  border-radius:16px;
+  padding:34px
+}
+body.theme-dark .dark-gallery h1{
+  font-size:clamp(2.7rem,6vw,4.8rem);
+  letter-spacing:-.045em
+}
+body.theme-dark .collection-strip{
+  background:#0c1014;
+  border:1px solid #1a2129;
+  box-shadow:none
+}
+body.theme-dark .cards{
+  grid-template-columns:repeat(3,1fr);
+  gap:30px
+}
+body.theme-dark .record{
+  background:transparent;
+  border:0;
+  box-shadow:none
+}
+body.theme-dark .cover{
+  border-radius:10px;
+  box-shadow:0 18px 34px rgba(0,0,0,.32)
+}
+body.theme-dark .recbody{
+  padding:12px 2px 0
+}
+body.theme-dark .recbody h3{font-size:1rem}
+body.theme-dark .tag{display:none}
+
+/* mobile stronger */
+@media(max-width:780px){
+  body.theme-luxury .luxury-console,
+  body.theme-retro .retro-shop,
+  body.theme-neon .neon-stage{min-height:560px}
+  body.theme-luxury .platter{width:205px;height:205px}
+  body.theme-luxury .tonearm{height:185px}
+  body.theme-retro .retro-copy h1{font-size:3.1rem}
+  body.theme-neon .neon-sign{font-size:2.5rem}
+  body.theme-pop .pop-board{min-height:520px;padding:28px 24px 200px}
+  body.theme-pop .pop-title{font-size:4rem}
+  body.theme-dark .cards{grid-template-columns:repeat(2,1fr)}
+}
+
 </style>
 </head>
 <body>
@@ -792,7 +1067,7 @@ $('importFile').onchange=e=>{
 let lang = localStorage.getItem('mp-vinyl-lang') || 'de';
 const i18n = {
   de:{brandSub:'Meine Plattensammlung',heroTitle:'Platte fotografieren. Rest eintragen. Fertig.',heroText:'Deine private Plattensammlung auf Handy und PC. Mit Cover, Interpret, Album, Jahr, Musikrichtung und Titeln.',add:'＋ Platte hinzufügen',import:'Sicherung laden',collection:'Sammlung',records:'Platten',artists:'Interpreten',genres:'Genres',search:'Suchen nach Interpret, Album, Jahr oder Genre …',newest:'Neueste zuerst',artistSort:'Interpret A–Z',albumSort:'Album A–Z',yearSort:'Jahr',bottom:'＋ Neue Platte',backup:'Sicherung',dialogNew:'Platte hinzufügen',dialogEdit:'Platte bearbeiten',camera:'Cover fotografieren oder auswählen',cameraHelp:'Auf dem iPhone öffnet „Foto auswählen“ direkt Kamera/Fotomediathek.',coverUrl:'Cover-URL aus dem Internet',artist:'Interpret',album:'Album',year:'Jahr',genre:'Musikrichtung',tracks:'Titelliste',save:'Speichern',delete:'Löschen',empty:'Noch keine Platten gefunden.',first:'Erste Platte hinzufügen',titles:'Titel',confirmDelete:'Diese Platte wirklich löschen?',loaded:'Sicherung geladen.',invalid:'Die Datei ist keine gültige MP-Vinyl-Sicherung.'},
-  no:{brandSub:'Min platesamling',heroTitle:'Ta bilde av platen. Fyll inn resten. Ferdig.',heroText:'Din private platesamling på mobil og PC. Med cover, artist, album, år, sjanger og låtliste.',add:'＋ Legg til plate',import:'Last inn sikkerhetskopi',collection:'Samling',records:'Plater',artists:'Artister',genres:'Sjangre',search:'Søk etter artist, album, år eller sjanger …',newest:'Nyeste først',artistSort:'Artist A–Å',albumSort:'Album A–Å',yearSort:'År',bottom:'＋ Ny plate',backup:'Sikkerhetskopi',dialogNew:'Legg til plate',dialogEdit:'Rediger plate',camera:'Ta bilde av cover eller velg bilde',cameraHelp:'På iPhone åpner «Velg bilde» kameraet eller bildebiblioteket.',coverUrl:'Cover-URL fra internett',artist:'Artist',album:'Album',year:'År',genre:'Sjanger',tracks:'Låtliste',save:'Lagre',delete:'Slett',empty:'Ingen plater funnet ennå.',first:'Legg til første plate',titles:'låter',confirmDelete:'Vil du virkelig slette denne platen?',loaded:'Sikkerhetskopien er lastet inn.',invalid:'Filen er ikke en gyldig MP-Vinyl-sikkerhetskopi.'}
+  no:{brandSub:'Platesamlingen min',heroTitle:'Ta et bilde av platen – resten ordner du på et øyeblikk.',heroText:'Samle platene dine på mobil og PC – med cover, artist, album, utgivelsesår, sjanger og sporliste.',add:'＋ Legg til en plate',import:'Importer sikkerhetskopi',collection:'Samling',records:'Plater',artists:'Artister',genres:'Sjangre',search:'Søk etter artist, album, år eller sjanger …',newest:'Nyeste først',artistSort:'Artist A–Å',albumSort:'Album A–Å',yearSort:'Utgivelsesår',bottom:'＋ Ny plate',backup:'Backup',dialogNew:'Legg til plate',dialogEdit:'Rediger plate',camera:'Ta bilde av coveret eller velg et bilde',cameraHelp:'På iPhone kan du bruke kameraet eller velge et bilde fra bildebiblioteket.',coverUrl:'Coverlenke fra nettet',artist:'Artist',album:'Album',year:'Utgivelsesår',genre:'Sjanger',tracks:'Sporliste',save:'Lagre',delete:'Slett',empty:'Ingen plater her ennå.',first:'Legg til den første platen',titles:'spor',confirmDelete:'Vil du slette denne platen?',loaded:'Backupen er lastet inn.',invalid:'Denne filen er ikke en gyldig MP Vinyl-sikkerhetskopi.'}
 };
 function applyLang(){
  const t=i18n[lang]; document.documentElement.lang=lang;
