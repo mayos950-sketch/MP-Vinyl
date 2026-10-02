@@ -81,6 +81,24 @@ dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
 .small{font-size:.86rem;color:var(--muted)}
 .row{display:flex;gap:10px} .row>*{flex:1}
 @media(max-width:600px){.brand h1{font-size:3.4rem}.brand p{font-size:.88rem}.hero-btn{font-size:.9rem;min-height:58px}.recent{grid-template-columns:repeat(3,1fr)}}
+
+.native-file-hidden{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  overflow:hidden!important;
+}
+.file-picker-btn{
+  margin-top:0;
+  text-align:center;
+}
+.file-name{
+  margin-top:8px;
+  color:var(--muted);
+}
+
 </style>
 </head>
 <body>
@@ -129,7 +147,12 @@ dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
 
 <dialog id="loginDialog"><div class="modal"><div class="modal-head"><h3 id="loginTitle">Anmelden</h3><button class="close" data-close="loginDialog">×</button></div><p id="loginSub" class="small"></p><div class="field"><label>E-Mail</label><input id="loginEmail" type="email"></div><div class="field"><label id="passLabel">Passwort</label><input id="loginPassword" type="password"></div><button id="signInBtn" class="primary">Anmelden</button><button id="signUpBtn" class="secondary">Jetzt registrieren</button><button id="signOutBtn" class="secondary" style="display:none">Abmelden</button><div id="loginMsg" class="small" style="margin-top:10px"></div></div></dialog>
 
-<dialog id="addDialog"><div class="modal"><div class="modal-head"><h3 id="addTitle">Neue Platte</h3><button class="close" data-close="addDialog">×</button></div><div class="field"><label id="coverLabel">Coverfoto</label><input id="photoInput" type="file" accept="image/*" capture="environment"></div><div class="field"><label id="artistLabel">Interpret</label><input id="artistInput"></div><div class="field"><label>Album</label><input id="albumInput"></div><div class="row"><div class="field"><label id="yearLabel">Jahr</label><input id="yearInput"></div><div class="field"><label>Genre</label><input id="genreInput"></div></div><div class="field"><label id="tracksLabel">Titel / Songs</label><textarea id="tracksInput" rows="4"></textarea></div><button id="saveRecord" class="primary">Speichern</button></div></dialog>
+<dialog id="addDialog"><div class="modal"><div class="modal-head"><h3 id="addTitle">Neue Platte</h3><button class="close" data-close="addDialog">×</button></div><div class="field">
+  <label id="coverLabel">Coverfoto</label>
+  <input id="photoInput" class="native-file-hidden" type="file" accept="image/*" capture="environment">
+  <button id="photoPickBtn" type="button" class="secondary file-picker-btn">Foto aufnehmen / auswählen</button>
+  <div id="photoFileName" class="small file-name">Keine Datei ausgewählt</div>
+</div><div class="field"><label id="artistLabel">Interpret</label><input id="artistInput"></div><div class="field"><label>Album</label><input id="albumInput"></div><div class="row"><div class="field"><label id="yearLabel">Jahr</label><input id="yearInput"></div><div class="field"><label>Genre</label><input id="genreInput"></div></div><div class="field"><label id="tracksLabel">Titel / Songs</label><textarea id="tracksInput" rows="4"></textarea></div><button id="saveRecord" class="primary">Speichern</button></div></dialog>
 
 <script>
 const SUPABASE_URL='https://ngbineemnuvrasvffopv.supabase.co';
@@ -141,7 +164,7 @@ let records=JSON.parse(localStorage.getItem('mp-vinyl-records-v1')||'[]');
 let currentUser=null,photoData='';
 
 const T={
-de:{tag:'Meine Sammlung. Meine Musik.',login:'Anmelden',account:'Konto',add:'Neue Platte hinzufügen',collection:'Meine Sammlung',recent:'Zuletzt hinzugefügt',collectionTitle:'Sammlung',search:'Suche',stats:'Statistik',profile:'Profil',records:'Platten',artists:'Interpreten',genres:'Genres',years:'Jahrgänge',topArtist:'Meistgesammelter Interpret',topGenre:'Häufigstes Genre',notSigned:'Nicht angemeldet',sync:'Konto & Synchronisierung',export:'Sicherheitskopie speichern',import:'Sicherheitskopie laden',homeSearch:'Künstler, Album, Jahr oder Genre …',searchPlaceholder:'Interpret, Album, Jahr oder Genre …',save:'Speichern',newRecord:'Neue Platte',cover:'Coverfoto',artist:'Interpret',year:'Jahr',tracks:'Titel / Songs',pass:'Passwort',register:'Jetzt registrieren',logout:'Abmelden'},
+de:{tag:'Meine Sammlung. Meine Musik.',login:'Anmelden',account:'Konto',add:'Neue Platte hinzufügen',collection:'Meine Sammlung',recent:'Zuletzt hinzugefügt',collectionTitle:'Sammlung',search:'Suche',stats:'Statistik',profile:'Profil',records:'Platten',artists:'Interpreten',genres:'Genres',years:'Jahrgänge',topArtist:'Meistgesammelter Interpret',topGenre:'Häufigstes Genre',notSigned:'Nicht angemeldet',sync:'Konto & Synchronisierung',export:'Sicherheitskopie speichern',import:'Sicherheitskopie laden',homeSearch:'Künstler, Album, Jahr oder Genre …',searchPlaceholder:'Interpret, Album, Jahr oder Genre …',save:'Speichern',newRecord:'Neue Platte',cover:'Coverfoto',artist:'Interpret',year:'Jahr',tracks:'Titel / Songs',pass:'Passwort',register:'Jetzt registrieren',logout:'Abmelden',photoPick:'Foto aufnehmen / auswählen',noFile:'Keine Datei ausgewählt'},
 no:{tag:'Min samling. Min musikk.',login:'Logg inn',account:'Konto',add:'Legg til ny plate',collection:'Min samling',recent:'Sist lagt til',collectionTitle:'Samling',search:'Søk',stats:'Statistikk',profile:'Profil',records:'Plater',artists:'Artister',genres:'Sjangre',years:'Årstall',topArtist:'Mest samlet artist',topGenre:'Vanligste sjanger',notSigned:'Ikke innlogget',sync:'Konto og synkronisering',export:'Lagre sikkerhetskopi',import:'Last inn sikkerhetskopi',homeSearch:'Artist, album, år eller sjanger …',searchPlaceholder:'Artist, album, år eller sjanger …',save:'Lagre',newRecord:'Ny plate',cover:'Coverbilde',artist:'Artist',year:'År',tracks:'Spor / sanger',pass:'Passord',register:'Registrer deg',logout:'Logg ut'}
 };
 function tr(k){return T[lang][k]}
@@ -158,6 +181,8 @@ function applyLang(){
  $('loginTitle').textContent=tr('login');
  $('loginSub').textContent=lang==='no'?'Logg inn for å synkronisere samlingen på alle enhetene dine.':'Melde dich an, um deine Sammlung auf allen Geräten zu synchronisieren.';$('passLabel').textContent=tr('pass');$('signInBtn').textContent=tr('login');$('signUpBtn').textContent=tr('register');$('signOutBtn').textContent=tr('logout');
  $('addTitle').textContent=tr('newRecord');$('coverLabel').textContent=tr('cover');$('artistLabel').textContent=tr('artist');$('yearLabel').textContent=tr('year');$('tracksLabel').textContent=tr('tracks');$('saveRecord').textContent=tr('save');
+ $('photoPickBtn').textContent=tr('photoPick');
+ if(!$('photoInput').files?.length) $('photoFileName').textContent=tr('noFile');
 }
 function setLang(v){lang=v;localStorage.setItem('mp-vinyl-lang',lang);applyLang()}
 $('homeLang').onchange=e=>setLang(e.target.value);$('profileLang').onchange=e=>setLang(e.target.value);
@@ -176,8 +201,19 @@ function renderStats(){const ar={},ge={},yr=new Set();records.forEach(r=>{if(r.a
 function updateProfile(){$('profileStatus').textContent=currentUser?.email||tr('notSigned')}
 
 function openAdd(){$('addDialog').showModal()}$('addFromHome').onclick=openAdd;$('navAdd').onclick=openAdd;
-$('photoInput').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const rd=new FileReader();rd.onload=()=>photoData=rd.result;rd.readAsDataURL(f)}
-$('saveRecord').onclick=async()=>{const r={id:crypto.randomUUID(),artist:$('artistInput').value.trim(),album:$('albumInput').value.trim(),year:$('yearInput').value.trim(),genre:$('genreInput').value.trim(),tracks:$('tracksInput').value.trim(),photoData};if(!r.artist&&!r.album)return;records.unshift(r);saveLocal();$('addDialog').close();['artistInput','albumInput','yearInput','genreInput','tracksInput'].forEach(id=>$(id).value='');photoData='';renderCollection('');if(currentUser&&sb){
+$('photoPickBtn').onclick=()=>$('photoInput').click();
+$('photoInput').onchange=e=>{
+  const f=e.target.files?.[0];
+  if(!f){
+    $('photoFileName').textContent=tr('noFile');
+    return;
+  }
+  $('photoFileName').textContent=f.name || (lang==='no'?'Bilde valgt':'Foto ausgewählt');
+  const rd=new FileReader();
+  rd.onload=()=>photoData=rd.result;
+  rd.readAsDataURL(f);
+}
+$('saveRecord').onclick=async()=>{const r={id:crypto.randomUUID(),artist:$('artistInput').value.trim(),album:$('albumInput').value.trim(),year:$('yearInput').value.trim(),genre:$('genreInput').value.trim(),tracks:$('tracksInput').value.trim(),photoData};if(!r.artist&&!r.album)return;records.unshift(r);saveLocal();$('addDialog').close();['artistInput','albumInput','yearInput','genreInput','tracksInput'].forEach(id=>$(id).value='');$('photoInput').value='';$('photoFileName').textContent=tr('noFile');photoData='';renderCollection('');if(currentUser&&sb){
   try{
     const cloudRecord={
       id:r.id,
